@@ -7,7 +7,7 @@ package alberguePerronServer.entity;
 
 /**
  *
- * @author 2dam
+ * @author Alatz
  */
 public enum Privilege {
     /**
