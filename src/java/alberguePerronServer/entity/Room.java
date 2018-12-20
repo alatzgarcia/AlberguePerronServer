@@ -24,7 +24,7 @@ public class Room implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer roomNum;
     private Integer totalSpace;
     private Integer available;
     private String status;
@@ -35,7 +35,7 @@ public class Room implements Serializable {
     
     //Getters
     public Integer getId() {
-        return id;
+        return roomNum;
     }
 
     public Integer getTotalSpace() {
@@ -63,7 +63,7 @@ public class Room implements Serializable {
     
     //Setters
     public void setId(Integer id) {
-        this.id = id;
+        this.roomNum = id;
     }
 
     public void setTotalSpace(Integer totalSpace) {
@@ -91,7 +91,7 @@ public class Room implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (roomNum != null ? roomNum.hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +102,7 @@ public class Room implements Serializable {
             return false;
         }
         Room other = (Room) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.roomNum == null && other.roomNum != null) || (this.roomNum != null && !this.roomNum.equals(other.roomNum))) {
             return false;
         }
         return true;
@@ -110,7 +110,7 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return "alberguePerronServer.entity.Room[ id=" + id + " ]";
+        return "alberguePerronServer.entity.Room[ id=" + roomNum + " ]";
     }
     
 }
