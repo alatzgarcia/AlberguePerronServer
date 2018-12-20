@@ -15,12 +15,13 @@ import javax.persistence.Table;
 
 /**
  *
- * @author 2dam
+ * @author Alatz
  */
 @Entity
 @Table(name="pet",schema="albergueperrondb")
 public class Pet implements Serializable {
 
+    private static long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -32,69 +33,111 @@ public class Pet implements Serializable {
     private String colour;
     private String description;
 
-    //Getters
     public Integer getId() {
         return id;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public String getSpecie() {
-        return specie;
-    }
-
-    public String getRace() {
-        return race;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColour() {
-        return colour;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-    
-    //Setters
     public void setId(Integer id) {
         this.id = id;
     }
 
+    /**
+     * Gets the owner of the pet
+     * @return the owner
+     */
+    public User getOwner() {
+        return owner;
+    }
+
+    /**
+     * Sets the owner of the pet
+     * @param owner the owner to set
+     */
     public void setOwner(User owner) {
         this.owner = owner;
     }
 
+    /**
+     * Get the specie of the pet
+     * @return the specie
+     */
+    public String getSpecie() {
+        return specie;
+    }
+
+    /**
+     * Sets the specie of the pet
+     * @param specie the specie to set
+     */
     public void setSpecie(String specie) {
         this.specie = specie;
     }
 
+    /**
+     * Gets the race of the pet
+     * @return the race
+     */
+    public String getRace() {
+        return race;
+    }
+
+    /**
+     * Sets the race of the pet
+     * @param race the race to set
+     */
     public void setRace(String race) {
         this.race = race;
     }
 
+    /**
+     * Gets the name of the pet
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name of the name
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets colour of teh pet
+     * @return the colour
+     */
+    public String getColour() {
+        return colour;
+    }
+
+    /**
+     * @param colour the colour to set
+     */
     public void setColour(String colour) {
         this.colour = colour;
     }
 
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
     public void setDescription(String description) {
         this.description = description;
     }
     
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (getId() != null ? getId().hashCode() : 0);
         return hash;
     }
 
@@ -105,7 +148,7 @@ public class Pet implements Serializable {
             return false;
         }
         Pet other = (Pet) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -113,7 +156,6 @@ public class Pet implements Serializable {
 
     @Override
     public String toString() {
-        return "alberguePerronServer.entity.Pet[ id=" + id + " ]";
+        return "alberguePerronServer.entity.Pet[ id=" + getId() + " ]";
     }
-    
 }
