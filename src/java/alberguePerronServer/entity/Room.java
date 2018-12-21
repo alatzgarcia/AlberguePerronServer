@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,6 +24,9 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name="room",schema="albergueperrondb")
+@NamedQuery(name="findAllRooms",
+    query="SELECT r FROM Room r ORDER BY r.roomNum DESC"
+)
 @XmlRootElement
 public class Room implements Serializable {
 

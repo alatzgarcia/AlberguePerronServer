@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -24,6 +25,9 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name="incident",schema="albergueperrondb")
+@NamedQuery(name="findAllIncidents",
+    query="SELECT i FROM Incident i ORDER BY i.id DESC"
+)
 @XmlRootElement
 public class Incident implements Serializable {
 
@@ -33,7 +37,7 @@ public class Incident implements Serializable {
     private Integer id;
     private String incidentType;
     @ManyToMany
-    @JoinTable(name="INCI_USERS")
+    @JoinTable(name="INCI_USERS", schema="albergueperrondb")
     private List<User> implicateds;
     private String description;
     @ManyToOne

@@ -13,6 +13,7 @@ import alberguePerronServer.exception.UpdateException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -20,6 +21,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author 2dam
  */
+@Stateless
 public class RoomEJB implements RoomEJBLocal{
     /**
      * Logger for the class.
@@ -53,7 +55,7 @@ public class RoomEJB implements RoomEJBLocal{
         try{
             LOGGER.info("RoomManager: Reading all rooms.");
             //TODO -- Create named query on entity
-            rooms=em.createNamedQuery("findAllIncidents").getResultList();
+            rooms=em.createNamedQuery("findAllRooms").getResultList();
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "RoomManager: Exception reading all rooms:",
                     e.getMessage());

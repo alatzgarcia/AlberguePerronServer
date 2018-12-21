@@ -37,7 +37,7 @@ public class IncidentREST {
     private IncidentEJBLocal ejb;
     
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void create(Incident entity) {
         try {
             ejb.createIncident(entity);
@@ -48,7 +48,7 @@ public class IncidentREST {
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Integer id, Incident entity) {
         try {
             ejb.updateIncident(entity);
@@ -69,7 +69,7 @@ public class IncidentREST {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public Incident find(@PathParam("id") Integer id) {
         Incident incident = null;
         try {
@@ -81,7 +81,7 @@ public class IncidentREST {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Incident> findAll() {
         List<Incident> incidents = null;
         try {
