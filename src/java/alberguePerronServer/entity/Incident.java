@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,6 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="incident",schema="albergueperrondb")
+@XmlRootElement
 public class Incident implements Serializable {
 
     private static long serialVersionUID = 1L;
@@ -61,6 +64,7 @@ public class Incident implements Serializable {
     /**
      * @return the implicateds
      */
+    @XmlTransient
     public List<User> getImplicateds() {
         return implicateds;
     }

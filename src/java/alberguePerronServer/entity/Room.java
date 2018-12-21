@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -20,6 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="room",schema="albergueperrondb")
+@XmlRootElement
 public class Room implements Serializable {
 
     private static long serialVersionUID = 1L;
@@ -93,6 +96,7 @@ public class Room implements Serializable {
     /**
      * @return the incidents
      */
+    @XmlTransient
     public List<Incident> getIncidents() {
         return incidents;
     }
@@ -107,6 +111,7 @@ public class Room implements Serializable {
     /**
      * @return the stays
      */
+    @XmlTransient
     public List<Stay> getStays() {
         return stays;
     }
