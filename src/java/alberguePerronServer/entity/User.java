@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,6 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name="user",schema="albergueperrondb")
+@NamedQuery(name="findAllUsers", query = "SELECT u FROM User u ORDER BY u.id ASC")
 @XmlRootElement
 public class User implements Serializable {
 

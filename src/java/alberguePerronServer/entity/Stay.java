@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name="stay",schema="albergueperrondb")
+@NamedQuery(name="findAllStays", query="SELECT s FROM Stay s ORDER BY s.id ASC")
 @XmlRootElement
 public class Stay implements Serializable {
 

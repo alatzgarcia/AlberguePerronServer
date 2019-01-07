@@ -13,6 +13,7 @@ import alberguePerronServer.exception.UpdateException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.InternalServerErrorException;
@@ -21,10 +22,11 @@ import javax.ws.rs.InternalServerErrorException;
  *
  * @author Diego
  */
+@Stateless
 public class StayEJB implements StayManagerEJBLocal{
     
     private static final Logger LOGGER =
-            Logger.getLogger("javafxserverside");
+            Logger.getLogger("StayEJB.class");
     
     @PersistenceContext
     private EntityManager em;
@@ -62,7 +64,7 @@ public class StayEJB implements StayManagerEJBLocal{
         List<Stay> stays=null;
         try{
             LOGGER.info("UserManager: Reading all users.");
-            stays=em.createNamedQuery("findAllUsers").getResultList();
+            stays=em.createNamedQuery("findAllStays").getResultList();
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserManager: Exception reading all users:",
                     e.getMessage());

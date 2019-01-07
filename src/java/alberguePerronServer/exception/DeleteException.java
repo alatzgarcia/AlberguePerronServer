@@ -7,7 +7,7 @@ package alberguePerronServer.exception;
 
 /**
  * This class represents any error during user object's deletion in application storage.
- * @author javi
+ * @author Diego
  */
 public class DeleteException extends Exception {
 

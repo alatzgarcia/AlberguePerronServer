@@ -33,10 +33,10 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Diego
  */
-@Path("albergueperronserver.entity.stay")
-public class StayFacadeREST {
+@Path("stay")
+public class StayREST {
     private static final Logger LOGGER =
-            Logger.getLogger("javafxserverside");
+            Logger.getLogger("StayREST.class");
     
     @EJB
     private StayManagerEJBLocal ejb;
@@ -45,11 +45,11 @@ public class StayFacadeREST {
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Stay stay) {
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: create {0}.",stay);
+            LOGGER.log(Level.INFO,"StayRESTful service: create {0}.",stay);
             ejb.createStay(stay);
         } catch (CreateException ex) {
             LOGGER.log(Level.SEVERE, 
-                    "UserRESTful service: Exception creating user, {0}",
+                    "StayRESTful service: Exception creating stay, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -60,11 +60,11 @@ public class StayFacadeREST {
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Integer id, Stay stay) {
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: update {0}.",stay);
+            LOGGER.log(Level.INFO,"StayRESTful service: update {0}.",stay);
             ejb.updateStay(stay);
         } catch (UpdateException ex) {
             LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception updating user, {0}",
+                    "StayRESTful service: Exception updating stay, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -74,11 +74,11 @@ public class StayFacadeREST {
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: delete User by id={0}.",id);
+            LOGGER.log(Level.INFO,"StayRESTful service: delete Stay by id={0}.",id);
             ejb.deleteStay(ejb.findStayById(id));
         } catch (ReadException | DeleteException ex) {
             LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception deleting user by id, {0}",
+                    "StayRESTful service: Exception deleting stay by id, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
         } 
@@ -86,15 +86,15 @@ public class StayFacadeREST {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public Stay find(@PathParam("id") Integer id) {
         Stay stay=null;
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: find User by id={0}.",id);
+            LOGGER.log(Level.INFO,"StayRESTful service: find Stay by id={0}.",id);
             stay=ejb.findStayById(id);
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception reading user by id, {0}",
+                    "StayRESTful service: Exception reading stay by id, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
@@ -102,15 +102,15 @@ public class StayFacadeREST {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Stay> findAll() {
         List<Stay> stays=null;
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: find all users.");
+            LOGGER.log(Level.INFO,"StayRESTful service: find all stays.");
             stays=ejb.findAllStays();
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception reading all users, {0}",
+                    "StayRESTful service: Exception reading all stays, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
         }

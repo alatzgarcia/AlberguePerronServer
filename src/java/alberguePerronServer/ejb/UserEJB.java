@@ -25,7 +25,7 @@ import javax.persistence.PersistenceContext;
 public class UserEJB implements UserManagerEJBLocal{
     
     private static final Logger LOGGER =
-            Logger.getLogger("javafxserverside");
+            Logger.getLogger("UserEJB.class");
     
     @PersistenceContext
     private EntityManager em;

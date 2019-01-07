@@ -7,7 +7,7 @@ package alberguePerronServer.exception;
 
 /**
  * This class represents any error during user object's creation in application storage.
- * @author javi
+ * @author Diego
  */
 public class CreateException extends Exception {
 

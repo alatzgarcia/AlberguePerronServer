@@ -7,7 +7,7 @@ package alberguePerronServer.exception;
 
 /**
  * This class represents any error during any query in application storage.
- * @author javi
+ * @author Diego
  */
 public class ReadException extends Exception {
 

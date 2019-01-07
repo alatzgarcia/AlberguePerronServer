@@ -33,11 +33,11 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Diego
  */
-@Path("albergueperronserver.entity.user")
-public class UserFacadeREST{
+@Path("users")
+public class UserREST{
 
     private static final Logger LOGGER =
-            Logger.getLogger("javafxserverside");
+            Logger.getLogger("UserREST.class");
     
     @EJB
     private UserManagerEJBLocal ejb;
