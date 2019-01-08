@@ -30,7 +30,7 @@ public class Incident implements Serializable {
     private Integer id;
     private String incidentType;
     @ManyToMany
-    @JoinTable(name="INCI_USERS")
+    @JoinTable(name="INCI_USERS",schema="albergueperrondb")
     private List<User> implicateds;
     private String description;
     @ManyToOne
