@@ -24,73 +24,105 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class UserEJB implements UserManagerEJBLocal{
     
+    /**
+     * The logger that will show messages
+     */
     private static final Logger LOGGER =
             Logger.getLogger("UserEJB.class");
     
+    /**
+     * Entity manager object.
+     */
     @PersistenceContext
     private EntityManager em;
-
+    
+    /**
+     * Creates an user with the data sent by the REST
+     * @param user User: User data to create
+     * @throws CreateException 
+     */
     @Override
     public void createUser(User user) throws CreateException {
-        LOGGER.info("UserManager: Creating user.");
+        LOGGER.info("UserEJB: Creating user.");
         try{
             em.persist(user);
-            LOGGER.info("UserManager: User created.");
+            LOGGER.info("UserEJB: User created.");
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception creating user.{0}",
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception creating user.",
                     e.getMessage());
             throw new CreateException(e.getMessage());
         }    }
-
+    
+    /**
+     * Update an user with the data sent by the REST
+     * @param user User: New data to update
+     * @throws UpdateException throws when the update fails
+     */
     @Override
     public void updateUser(User user) throws UpdateException {
-        LOGGER.info("UserManager: Updating user.");
+        LOGGER.info("UserEJB: Updating user.");
         try{
             //if(!em.contains(user))em.merge(user);
             em.merge(user);
             em.flush();
-            LOGGER.info("UserManager: User updated.");
+            LOGGER.info("UserEJB: User updated.");
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception updating user.{0}",
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception updating user: ",
                     e.getMessage());
             throw new UpdateException(e.getMessage());
         }    }
 
+    /**
+     * Finds an user by Id
+     * @param id String: The id of the user yo search.
+     * @return The User found
+     * @throws ReadException throws when the read operation fails.
+     */
     @Override
     public User findUserById(String id) throws ReadException {
         User user=null;
         try{
-            LOGGER.info("UserManager: Finding user by login.");
+            LOGGER.info("UserEJB: Finding user by login.");
             user=em.find(User.class, id);
-            LOGGER.log(Level.INFO,"UserManager: User found {0}",user.getLogin());
+            LOGGER.log(Level.INFO,"UserEJB: User found ",user.getLogin());
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception Finding user by login:",
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception Finding user by login:",
                     e.getMessage());
             throw new ReadException(e.getMessage());
         }
         return user;    }
-
+    
+    /**
+     * Deletes an user by id
+     * @param user User: The user found by Id   
+     * @throws DeleteException throws when the delete operation fails.
+     */
     @Override
     public void deleteUser(User user) throws DeleteException {
-        LOGGER.info("UserManager: Deleting user.");
+        LOGGER.info("UserEJB: Deleting user.");
         try{
             user=em.merge(user);
             em.remove(user);
-            LOGGER.info("UserManager: User deleted.");
+            LOGGER.info("UserEJB: User deleted.");
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception deleting user.{0}",
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception deleting user.",
                     e.getMessage());
             throw new DeleteException(e.getMessage());
         }    }
 
+    /**
+     * Finds all the users
+     * @return a List of all the users 
+     * @throws ReadException throws when the read operation fails.
+     */
     @Override
     public List<User> findAllUsers() throws ReadException {
         List<User> users=null;
         try{
-            LOGGER.info("UserManager: Reading all users.");
+            LOGGER.info("UserEJB: Reading all users.");
             users=em.createNamedQuery("findAllUsers").getResultList();
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception reading all users:",
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception reading all users:",
                     e.getMessage());
             throw new ReadException(e.getMessage());
         }
