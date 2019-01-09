@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -20,16 +22,18 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="stay",schema="albergueperrondb")
+@XmlRootElement
 public class Stay implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    @Id  
     @GeneratedValue(strategy = GenerationType.AUTO)
-   private String id;
+    private Integer id;
     @ManyToOne
     private User guest;
     @ManyToOne
     private Room room;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date date;
 
     @Override
@@ -61,7 +65,7 @@ public class Stay implements Serializable {
         return serialVersionUID;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -77,7 +81,7 @@ public class Stay implements Serializable {
         return date;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

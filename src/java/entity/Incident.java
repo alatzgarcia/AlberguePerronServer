@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -22,6 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="incident",schema="albergueperrondb")
+
 public class Incident implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +32,7 @@ public class Incident implements Serializable {
     private Integer id;
     private String incidentType;
     @ManyToMany
-    @JoinTable(name="INCI_USERS")
+    @JoinTable(name="INCI_USERS",schema="albergueperrondb")
     private List <User> implicateds;
     private String description;
     @ManyToOne

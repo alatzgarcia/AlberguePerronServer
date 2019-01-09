@@ -12,5 +12,5 @@ package entity;
 public enum Enumeration {
     GUEST,
     EMPLOYEE,
-    ADMIN
+    ADMIN;
 }

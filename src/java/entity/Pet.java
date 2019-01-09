@@ -6,14 +6,14 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -21,22 +21,22 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="pet",schema="albergueperrondb")
+@NamedQuery (name="findAllPets", query="SELECT p FROM Pet p ORDER BY p.id ASC")
+@XmlRootElement
 public class Pet implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+   private static final long serialVersionUID = 1L;
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
    private Integer id;
-    @ManyToOne
+   @ManyToOne
    private User owner;
    private String specie;
    private String race;
    private String name;
    private String colour;
    private String description;
-   @OneToMany (mappedBy="owner")
-   private List<User> pets;
-
+   
     @Override
     public int hashCode() {
         int hash = 0;
@@ -128,15 +128,6 @@ public class Pet implements Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public List<User> getPets() {
-        return pets;
-    }
-
-    public void setPets(List<User> pets) {
-        this.pets = pets;
-    }
-    
+    } 
     
 }

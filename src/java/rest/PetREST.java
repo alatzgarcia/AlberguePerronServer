@@ -30,12 +30,13 @@ import javax.ws.rs.Produces;
  *
  * @author 2dam
  */
+@Path("pet")
 public class PetREST {
       /**
      * Logger for class methods.
      */
     private static final Logger LOGGER =
-            Logger.getLogger("javafxserverside");
+            Logger.getLogger("PetREST.class");
     /**
      * EJB reference for business logic object.
      */
@@ -82,7 +83,7 @@ public class PetREST {
     @DELETE
     @Path("{id}")
     //@Consumes({"application/xml", "application/json"})
-    public void delete(@PathParam("id") String id) {
+    public void delete(@PathParam("id") Integer id) {
         try {
             LOGGER.log(Level.INFO,"PetRESTful service: delete Pet by id={0}.",id);
             Pet pet = null;
@@ -102,11 +103,11 @@ public class PetREST {
     @GET
     @Path("{id}")
     @Produces({"application/xml"})
-    public Pet find(@PathParam("id") String id) {
+    public Pet find(@PathParam("id") Integer id) {
         Pet pet=null;
         try {
             LOGGER.log(Level.INFO,"PetRESTful service: find pet by id={0}.",id);
-            pet=(Pet) ejb.findAllPets();
+            pet= ejb.findPetById(id);
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "PetRESTful service: Exception reading pet by id, {0}",
@@ -116,7 +117,7 @@ public class PetREST {
         return pet;
     }
     /**
-     * RESTful GET method for reading all {@link User} objects through an XML representation.
+     * RESTful GET method for reading all {@link Pet} objects through an XML representation.
      * @return A List of User objects containing data.
      */
     @GET
@@ -125,7 +126,8 @@ public class PetREST {
         List<Pet> pets=null;
         try {
             LOGGER.log(Level.INFO,"PetRESTful service: find all pets.");
-            pets=ejb.findAllPets();
+            pets=ejb.findAllPets(); 
+            
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "PetRESTful service: Exception reading all pets, {0}",

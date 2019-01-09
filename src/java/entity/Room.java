@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -20,10 +21,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="room",schema="albergueperrondb")
+@XmlRootElement
 public class Room implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer roomNum;
