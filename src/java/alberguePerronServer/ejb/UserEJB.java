@@ -36,14 +36,16 @@ public class UserEJB implements UserEJBLocal{
     private EntityManager em;
 
     @Override
-    public User findUserByLogin(String login) throws ReadException {
+    public User findUserById(String id) throws ReadException {
           User user=null;
         try{
-            LOGGER.info("UserManager: Finding user by login.");
-            user=em.find(User.class, login); //porque estamos buscando por la PK
-            LOGGER.log(Level.INFO,"UserManager: User found {0}",user.getLogin());
+            LOGGER.info("User: Finding user by id.");
+            user=em.find(User.class, id);
+            if (user!= null){
+                LOGGER.log(Level.INFO,"User: User found {0}",user.getId());
+            }
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception Finding user by login:",
+            LOGGER.log(Level.SEVERE, "User: Exception Finding user by id:",
                     e.getMessage());
             throw new ReadException(e.getMessage());
         }
@@ -54,10 +56,10 @@ public class UserEJB implements UserEJBLocal{
     public List<User> findAllUsers() throws ReadException {
         List<User> users=null;
         try{
-            LOGGER.info("UserManager: Reading all users.");
+            LOGGER.info("User: Reading all users.");
             users=em.createNamedQuery("findAllUsers").getResultList();
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception reading all users:",
+            LOGGER.log(Level.SEVERE, "UserM: Exception reading all users:",
                     e.getMessage());
             throw new ReadException(e.getMessage());
         }
@@ -66,10 +68,10 @@ public class UserEJB implements UserEJBLocal{
 
     @Override
     public void createUser(User user) throws CreateException {
-        LOGGER.info("UserManager: Creating user.");
+        LOGGER.info("User: Creating user.");
         try{
             em.persist(user);
-            LOGGER.info("UserManager: User created.");
+            LOGGER.info("User: User created.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserManager: Exception creating user.{0}",
                     e.getMessage());
@@ -79,14 +81,14 @@ public class UserEJB implements UserEJBLocal{
 
     @Override
     public void updateUser(User user) throws UpdateException {
-        LOGGER.info("UserManager: Updating user.");
+        LOGGER.info("User: Updating user.");
         try{
             //if(!em.contains(user))em.merge(user);
             em.merge(user);
             em.flush();
-            LOGGER.info("UserManager: User updated.");
+            LOGGER.info("User: User updated.");
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception updating user.{0}",
+            LOGGER.log(Level.SEVERE, "User: Exception updating user.{0}",
                     e.getMessage());
             throw new UpdateException(e.getMessage());
         }
@@ -94,6 +96,16 @@ public class UserEJB implements UserEJBLocal{
 
     @Override
     public void deleteUser(User user) throws DeleteException {
+        LOGGER.info("UserEJB: Deleting user.");
+        try{
+            user=em.merge(user);
+            em.remove(user);
+            LOGGER.info("UserEJB: User deleted.");
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception deleting user.",
+                    e.getMessage());
+            throw new DeleteException(e.getMessage());
+        } 
     }
 
    

@@ -20,29 +20,27 @@ import javax.ejb.Local;
 @Local
 public interface UserEJBLocal {
     /**
-     * Finds a {@link User} by its login. 
-     * @param login The login for the user to be found.
-     * @return The {@link User} object containing user data. 
-     * @throws ReadException If there is any Exception during processing.
+     * Finds a User by its login. 
+     * @param login The login for the user
+     * @return The User object
+     * @throws ReadException If there is any Exception
      */
-    public User findUserByLogin(String login) throws ReadException;
+    public User findUserById(String id) throws ReadException;
     /**
-     * Finds a List of {@link User} objects containing data for all users in the
-     * application data storage.
-     * @return A List of {@link User} objects.
-     * @throws ReadException If there is any Exception during processing.
+     * Finds a List of User objects 
+     * @return A List of User objects.
+     * @throws ReadException If there is any Exception
      */
     public List<User> findAllUsers() throws ReadException;
     /**
-     * Finds a List of {@link User} objects containing data for all users with certain
-     * profile value.
-     * @param user
+     * Finds a List of User objects 
+     * @param user The User
      * @throws alberguePerronServer.exception.CreateException
      */
     public void createUser(User user) throws CreateException;
     /**
-     * Updates a user's data in the underlying application storage. 
-     * @param user The {@link User} object containing the user data. 
+     * Updates a user's data in the database
+     * @param user The User object 
      * @throws UpdateException If there is any Exception during processing.
      */
     public void updateUser(User user) throws UpdateException;

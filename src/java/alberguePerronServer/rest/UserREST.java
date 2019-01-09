@@ -6,7 +6,6 @@
 package alberguePerronServer.rest;
 
 import alberguePerronServer.ejb.UserEJBLocal;
-import alberguePerronServer.entity.Privilege;
 import alberguePerronServer.entity.User;
 import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
@@ -16,8 +15,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -28,14 +25,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 /**
  *
  * @author Nerea JImenez
  */
 
-@Path("user")
+@Path("users")
 public class UserREST {
 
 /**
@@ -50,8 +46,8 @@ public class UserREST {
     @EJB
     private UserEJBLocal ejb;
     /**
-     * RESTful POST method for creating {@link User} objects from XML representation.
-     * @param user The object containing user data.
+     * RESTful POST method for creating User objects
+     * @param user The user
      */
     @POST
     @Consumes({"application/xml"})
@@ -67,8 +63,8 @@ public class UserREST {
         }
     }
     /**
-     * RESTful PUT method for updating {@link User} objects from XML representation.
-     * @param user The object containing user data.
+     * RESTful PUT method for updating User objects
+     * @param user The user
      */
     @PUT
     @Consumes({"application/xml"})
@@ -84,16 +80,16 @@ public class UserREST {
         }
     }
     /**
-     * RESTful DELETE method for deleting {@link User} objects from id.
-     * @param id The id for the object to be deleted.
+     * RESTful DELETE method for deleting users by id
+     * @param id The id for the user
      */
     @DELETE
     @Path("{id}")
-    //@Consumes({"application/xml", "application/json"})
+    //@Consumes({"application/xml"})
     public void delete(@PathParam("id") String id) {
         try {
             LOGGER.log(Level.INFO,"UserRESTful service: delete User by id={0}.",id);
-            ejb.deleteUser(ejb.findUserByLogin(id));
+            ejb.deleteUser(ejb.findUserById(id));
         } catch (ReadException | DeleteException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserRESTful service: Exception deleting user by id, {0}",
@@ -102,9 +98,9 @@ public class UserREST {
         } 
     }
     /**
-     * RESTful GET method for reading {@link User} objects through an XML representation.
-     * @param id The id for the object to be read.
-     * @return The User object containing data. 
+     * RESTful GET method for reading Users by id
+     * @param id The id for the user
+     * @return The User object 
      */
     @GET
     @Path("{id}")
@@ -113,7 +109,7 @@ public class UserREST {
         User user=null;
         try {
             LOGGER.log(Level.INFO,"UserRESTful service: find User by id={0}.",id);
-            user=ejb.findUserByLogin(id);
+            user=ejb.findUserById(id);
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserRESTful service: Exception reading user by id, {0}",
@@ -123,8 +119,8 @@ public class UserREST {
         return user;
     }
     /**
-     * RESTful GET method for reading all {@link User} objects through an XML representation.
-     * @return A List of User objects containing data.
+     * RESTful GET method for reading all User objects
+     * @return A List of User objects
      */
     @GET
     @Produces({"application/xml"})

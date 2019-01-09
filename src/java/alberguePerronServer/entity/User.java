@@ -13,6 +13,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,12 +27,17 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name="user",schema="albergueperrondb")
+@NamedQueries({
+    @NamedQuery(name="findAllUsers",
+            query="SELECT u FROM User u ORDER BY u.name DESC"
+    )
+  
+})
 @XmlRootElement
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
- 
     private String id;
     private String name;
     private String surname1;
