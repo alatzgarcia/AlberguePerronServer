@@ -34,7 +34,7 @@ public class Room implements Serializable {
     private String status;
     @OneToMany(mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(mappedBy="room")
+    @OneToMany(mappedBy="stayRoom")
     private List<Stay> stays;
     /**
      * gets the number of the room

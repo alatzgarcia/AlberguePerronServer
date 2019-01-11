@@ -106,7 +106,7 @@ public class StayEJB implements StayManagerEJBLocal{
             LOGGER.info("UserEJB: Finding user by login.");
             stay=em.find(Stay.class, id);
             if(stay!=null){
-                LOGGER.log(Level.INFO,"UserEJB: User found",stay.getRoom());
+                LOGGER.log(Level.INFO,"UserEJB: User found",stay.getStayRoom());
             }
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserEJB: Exception Finding user by login:",
