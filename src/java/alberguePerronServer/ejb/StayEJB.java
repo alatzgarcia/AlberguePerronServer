@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class StayEJB implements StayManagerEJBLocal{
     
+    
     /**
      * The logger that will show messages
      */
