@@ -140,4 +140,21 @@ public class UserREST{
         }
         return users;
     }
+    
+    @GET
+    @Path("privilege/{privilege}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<User> findByPrivilege(@PathParam("privilege") String privilege) {
+        List<User> users=null;
+        try{
+            LOGGER.log(Level.INFO,"UserREST: Find all users by privilege.");
+            users=ejb.findAllByPrivilege(privilege);
+        }catch(ReadException ex){
+            LOGGER.log(Level.SEVERE,
+                    "UserREST: finding all users exception",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+        return users;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package alberguePerronServer.ejb;
 
+import alberguePerronServer.entity.Privilege;
 import alberguePerronServer.entity.User;
 import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
@@ -130,4 +131,24 @@ public class UserEJB implements UserManagerEJBLocal{
         }
         return users;    
    }    
+
+    @Override
+    public List<User> findAllByPrivilege(String privilege) throws ReadException {
+        List<User> users=null;
+        try{
+            LOGGER.info("UserEJB: Reading users by privilege.");
+            if(privilege.equals("0")){
+                users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", Privilege.USER).getResultList();
+            }else if(privilege.equals("1")){
+                users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", Privilege.EMPLOYEE).getResultList();
+            }else if(privilege.equals("2")){
+                users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", Privilege.ADMIN).getResultList();
+            }
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "UserEJB: Exception reading by privilege:",
+                    e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        return users;
+    }
 }

@@ -54,4 +54,6 @@ public interface UserManagerEJBLocal {
      */
     public List<User> findAllUsers() throws ReadException;
     
+    public List<User> findAllByPrivilege(String privilege) throws ReadException;
+    
 }

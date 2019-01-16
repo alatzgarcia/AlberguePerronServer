@@ -71,9 +71,9 @@ public class Stay implements Serializable {
     }
 
     /**
-     * @param stayRoom the room to set
+     * @param room the room to set
      */
-    public void setStayRoom(Room stayRoom) {
+    public void setRoom(Room stayRoom) {
         this.stayRoom = stayRoom;
     }
 
