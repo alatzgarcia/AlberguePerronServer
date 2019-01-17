@@ -30,7 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name="findAllUsers",
             query="SELECT u FROM User u ORDER BY u.name DESC"
-    )
+    ),
+    @NamedQuery(name="findUserByLogin",
+            query="SELECT u FROM User u WHERE u.login = :login"
+    )    
+    
   
 })
 @XmlRootElement

@@ -50,4 +50,11 @@ public interface UserEJBLocal {
      * @throws DeleteException If there is any Exception during processing.
      */
     public void deleteUser(User user) throws DeleteException;
+
+    public User login(User user) throws ReadException ;
+    
+    public String desencrypt(String pass);
+    public StringBuilder getDigest(String password);
+
+    public User findUserByLogin(String login)throws ReadException ;
 }

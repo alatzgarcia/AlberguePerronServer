@@ -6,6 +6,7 @@
 package alberguePerronServer.rest;
 
 import alberguePerronServer.ejb.UserEJBLocal;
+import alberguePerronServer.entity.Pet;
 import alberguePerronServer.entity.User;
 import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
@@ -138,6 +139,34 @@ public class UserREST {
         return users;
     }
     
+    @GET
+    @Path("login/{login}")
+    @Produces({"application/xml"})
+    public User findUserByLogin(@PathParam("login") String login) {
+        User user=null;
+        try {
+            LOGGER.log(Level.INFO,"");
+            user=ejb.findUserByLogin(login);
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception reading users by profile, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+        return user;
+    }
+    
+    public User login(User user) {
+        
+        try {
+            
+            ejb.login(user);
+        } catch (ReadException ex) {
+            
+        }
+        return user;
+    }
+  
     
     
 }
