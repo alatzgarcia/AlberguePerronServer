@@ -51,10 +51,11 @@ public interface UserEJBLocal {
      */
     public void deleteUser(User user) throws DeleteException;
 
-    public User login(User user) throws ReadException ;
+    public void login(User user) throws ReadException ;
     
-    public String desencrypt(String pass);
-    public StringBuilder getDigest(String password);
+    public byte[] desencrypt(byte[] pass);
+    public byte[] getDigest(byte[] password);
 
     public User findUserByLogin(String login)throws ReadException ;
+     public void generateKey();
 }

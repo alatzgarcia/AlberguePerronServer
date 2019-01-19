@@ -13,14 +13,19 @@ import alberguePerronServer.exception.ReadException;
 import alberguePerronServer.exception.UpdateException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,6 +91,11 @@ public class UserEJB implements UserEJBLocal{
         try{
             //desencriptar contraseña
             //digest
+            if(user.getPassword()!=null){
+                //generateKey();
+                byte[] pass=desencrypt(user.getPassword());
+                user.setPassword(getDigest(pass));
+            }
             em.persist(user);
             LOGGER.info("User: User created.");
         }catch(Exception e){
@@ -131,7 +141,7 @@ public class UserEJB implements UserEJBLocal{
             LOGGER.info("");
             user=(User) em.createNamedQuery("findUserByLogin")
                      .setParameter("login", login)
-                     .getResultList();
+                     .getSingleResult();
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "",
                     e.getMessage());
@@ -147,90 +157,125 @@ public class UserEJB implements UserEJBLocal{
      * @throws ReadException
      */
     @Override
-    public User login(User user) throws ReadException {
+    public void login(User user) throws ReadException {
           User userDB=null;
           
           //desencriptar contraseña que viene de cliente
-          String password=desencrypt(user.getPassword());
+          byte[] password=desencrypt(user.getPassword());
           //digest
-          StringBuilder digestCliente = getDigest(password);
+          byte[] digestCliente = getDigest(password);
+          
         try{
-            userDB=em.find(User.class, user.getId());
-            
+            userDB=(User) em.createNamedQuery("findUserByLogin")
+                     .setParameter("login", user.getLogin())
+                     .getSingleResult();
+            byte[] digestDB = userDB.getPassword();
             if (userDB!= null){
-               //comparar digests
+               if(MessageDigest.isEqual(digestCliente, digestDB)){
+                   LOGGER.info("correcto");
+               }else{
+                   LOGGER.info("incorrecto");  
+               }
             }
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "User: Exception Finding user by id:",
                     e.getMessage());
             throw new ReadException(e.getMessage());
         }
-        return user;
+        
     }
    
-    public String desencrypt(String pass){
+    @Override
+    public byte[] desencrypt(byte[] pass){
         FileInputStream fis;
-        String password = null;
+       byte[] decodedMessage = null;
 	
-		try {
-			
-                    byte[] encodedMessage = pass.getBytes();
-			
-                    fis = new FileInputStream("private.key");
-                    byte[] privateKey = new byte[fis.available()];
-                    fis.read(privateKey);
-			
-                    PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(privateKey);
-                    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-                    PrivateKey privKey = keyFactory.generatePrivate(privKeySpec);
-			
-                    Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-                    cipher.init(Cipher.DECRYPT_MODE, privKey);
-                    byte[] decodedMessage = cipher.doFinal(encodedMessage);
-                    password = new String(decodedMessage);
+        try {
+		                 		
+            fis = new FileInputStream("private.key");
+            byte[] privateKey = new byte[fis.available()];
+            fis.read(privateKey);
+		
+            PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(privateKey);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PrivateKey privKey = keyFactory.generatePrivate(privKeySpec);
+		
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, privKey);
+            decodedMessage = cipher.doFinal(pass);
+                    //password = new String(decodedMessage);
                     
 			
-		} catch (FileNotFoundException e) {
+	} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+	} catch (IOException e) {
 			e.printStackTrace();
-		}catch (NoSuchAlgorithmException e) {
+	}catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
+	} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
+	} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
-		} catch (InvalidKeyException e) {
+	} catch (InvalidKeyException e) {
 			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
+	} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
-		} catch (BadPaddingException e) {
+	} catch (BadPaddingException e) {
 			e.printStackTrace();
-		}
-        return password;
+        }
+        return decodedMessage;
     }
     
-    public StringBuilder getDigest(String password){
+    public byte[] getDigest(byte[] password){
       
 		String algorithm = "SHA-512";
-                StringBuilder stringBuilder = null;
+                //StringBuilder stringBuilder = null;
+                byte[] result = null; 
 		try {
 			MessageDigest md = MessageDigest.getInstance(algorithm);
-			byte[] myTextInBytes = password.getBytes();
-			md.update(myTextInBytes);
-			byte[] result = md.digest();
+			//byte[] myTextInBytes = password;
+			md.update(password);
+			result = md.digest();
 
-			stringBuilder = new StringBuilder();
+			/**stringBuilder = new StringBuilder();
 			for (byte theByte : result) {
 				stringBuilder.append(String.format("%02x", theByte & 0xff));
 			}
-			
+			**/
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
                 
-             return stringBuilder;
+             return result;
+	}
+    @Override
+    public void generateKey() {
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(1024);
+			
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+			
+            PublicKey publicKey = keyPair.getPublic();
+            PrivateKey privateKey = keyPair.getPrivate();
+			
+            X509EncodedKeySpec pubspec = new X509EncodedKeySpec(publicKey.getEncoded());
+            FileOutputStream fos1 = new FileOutputStream("albergueperronclient/public.key");
+            fos1.write(pubspec.getEncoded());
+			
+            PKCS8EncodedKeySpec prispec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
+            FileOutputStream fos2 = new FileOutputStream("private.key");
+            fos2.write(prispec.getEncoded());
+            LOGGER.info("Key pair created");
+
+	} catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+	} catch (FileNotFoundException e) {
+            e.printStackTrace();
+	} catch (IOException e) {
+            e.printStackTrace();
 	}
 
+	}
     
 }

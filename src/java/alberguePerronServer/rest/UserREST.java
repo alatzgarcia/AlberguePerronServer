@@ -53,14 +53,11 @@ public class UserREST {
     @POST
     @Consumes({"application/xml"})
     public void create(User user) {
+        LOGGER.log(Level.INFO,"UserRESTful service: create {0}.",user);
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: create {0}.",user);
             ejb.createUser(user);
         } catch (CreateException ex) {
-            LOGGER.log(Level.SEVERE, 
-                    "UserRESTful service: Exception creating user, {0}",
-                    ex.getMessage());
-            throw new InternalServerErrorException(ex);
+            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -70,14 +67,18 @@ public class UserREST {
     @PUT
     @Consumes({"application/xml"})
     public void update(User user) {
+        LOGGER.log(Level.INFO,"UserRESTful service: update {0}.",user);
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: update {0}.",user);
-            ejb.updateUser(user);
+            if(user.getId()==null){
+               ejb.login(user); 
+            }else{
+               ejb.updateUser(user);
+            }
+            
+        } catch (ReadException ex) {
+            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UpdateException ex) {
-            LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception updating user, {0}",
-                    ex.getMessage());
-            throw new InternalServerErrorException(ex);
+            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -149,23 +150,14 @@ public class UserREST {
             user=ejb.findUserByLogin(login);
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception reading users by profile, {0}",
+                    "UserRESTful service: Exception reading users by login, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
         }
         return user;
     }
-    
-    public User login(User user) {
-        
-        try {
-            
-            ejb.login(user);
-        } catch (ReadException ex) {
-            
-        }
-        return user;
-    }
+  
+
   
     
     
