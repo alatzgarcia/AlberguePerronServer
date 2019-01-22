@@ -26,6 +26,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -69,14 +70,10 @@ public class UserREST {
     public void update(User user) {
         LOGGER.log(Level.INFO,"UserRESTful service: update {0}.",user);
         try {
-            if(user.getId()==null){
-               ejb.login(user); 
-            }else{
-               ejb.updateUser(user);
-            }
             
-        } catch (ReadException ex) {
-            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
+               ejb.updateUser(user);
+            
+        
         } catch (UpdateException ex) {
             Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -155,6 +152,23 @@ public class UserREST {
             throw new InternalServerErrorException(ex);
         }
         return user;
+    }
+    
+    @GET
+    @Path("log/{login}/{password}")
+    @Produces({"application/xml"})
+    public User login(@PathParam("login") String login,@PathParam("password") String password) {
+        User user = new User();
+        try { 
+            byte [] passwordB=DatatypeConverter.parseHexBinary(password);
+            user.setLogin(login);
+            user.setPassword(passwordB);
+            ejb.login(user);
+            
+        } catch (ReadException ex) {
+            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return user;
     }
   
 

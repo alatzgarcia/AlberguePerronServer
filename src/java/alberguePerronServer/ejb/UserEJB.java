@@ -204,7 +204,7 @@ public class UserEJB implements UserEJBLocal{
             cipher.init(Cipher.DECRYPT_MODE, privKey);
             decodedMessage = cipher.doFinal(pass);
                     //password = new String(decodedMessage);
-                    
+            LOGGER.info("Contraseña desencriptada");
 			
 	} catch (FileNotFoundException e) {
 			e.printStackTrace();
