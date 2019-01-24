@@ -160,9 +160,9 @@ public class UserREST {
     public User login(@PathParam("login") String login,@PathParam("password") String password) {
         User user = new User();
         try { 
-            byte [] passwordB=DatatypeConverter.parseHexBinary(password);
+            //byte [] passwordB=DatatypeConverter.parseHexBinary(password);
             user.setLogin(login);
-            user.setPassword(passwordB);
+            user.setPassword(password);
             ejb.login(user);
             
         } catch (ReadException ex) {

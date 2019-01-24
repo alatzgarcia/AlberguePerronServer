@@ -36,6 +36,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -93,8 +94,9 @@ public class UserEJB implements UserEJBLocal{
             //digest
             if(user.getPassword()!=null){
                 //generateKey();
-                byte[] pass=desencrypt(user.getPassword());
-                user.setPassword(getDigest(pass));
+                
+                byte[] pass=desencrypt(DatatypeConverter.parseHexBinary(user.getPassword()));
+                user.setPassword(DatatypeConverter.printHexBinary(getDigest(pass)));
             }
             em.persist(user);
             LOGGER.info("User: User created.");
@@ -161,17 +163,20 @@ public class UserEJB implements UserEJBLocal{
           User userDB=null;
           
           //desencriptar contraseña que viene de cliente
-          byte[] password=desencrypt(user.getPassword());
+          
+          byte[] pass=desencrypt(DatatypeConverter.parseHexBinary(user.getPassword()));
+          
           //digest
-          byte[] digestCliente = getDigest(password);
+          byte[] digestCliente = getDigest(pass);
           
         try{
             userDB=(User) em.createNamedQuery("findUserByLogin")
                      .setParameter("login", user.getLogin())
                      .getSingleResult();
-            byte[] digestDB = userDB.getPassword();
+            String digestDB = userDB.getPassword();
+            byte[] digest = DatatypeConverter.parseHexBinary(digestDB);
             if (userDB!= null){
-               if(MessageDigest.isEqual(digestCliente, digestDB)){
+               if(MessageDigest.isEqual(digestCliente, digest)){
                    LOGGER.info("correcto");
                }else{
                    LOGGER.info("incorrecto");  

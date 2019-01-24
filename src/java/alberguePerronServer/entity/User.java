@@ -50,7 +50,7 @@ public class User implements Serializable {
     private Privilege privilege;
     private String login;
     private String email;
-    private byte[] password;
+    private String password;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastPasswordChange;
     @ManyToMany(mappedBy="implicateds")
@@ -176,7 +176,7 @@ public class User implements Serializable {
      * Gets password value for user.
      * @return The password value.
      */
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -184,7 +184,7 @@ public class User implements Serializable {
      * Sets password value for user.
      * @param password The password user.
      */
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
     
