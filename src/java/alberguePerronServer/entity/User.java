@@ -33,7 +33,10 @@ import javax.xml.bind.annotation.XmlTransient;
     ),
     @NamedQuery(name="findUserByLogin",
             query="SELECT u FROM User u WHERE u.login = :login"
-    )    
+    ),
+    @NamedQuery(name="findUserByEmail",
+            query="SELECT u FROM User u WHERE u.email = :email"
+    ),
     
   
 })

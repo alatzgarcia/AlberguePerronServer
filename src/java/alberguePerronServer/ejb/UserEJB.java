@@ -11,10 +11,12 @@ import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
 import alberguePerronServer.exception.ReadException;
 import alberguePerronServer.exception.UpdateException;
+import albergueperronclient.passwordGen.PasswordGenerator;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -37,6 +39,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.HtmlEmail;
 
 /**
  *
@@ -152,6 +156,23 @@ public class UserEJB implements UserEJBLocal{
         return user;
     }
     
+    @Override
+    public User findUserByEmail(String email) throws ReadException {
+        User user=null;
+        try{
+            LOGGER.info("");
+            user=(User) em.createNamedQuery("findUserByEmail")
+                     .setParameter("email", email)
+                     .getSingleResult();
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "",
+                    e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        return user;
+    }
+    
+    
     /**
      *
      * @param id
@@ -159,7 +180,7 @@ public class UserEJB implements UserEJBLocal{
      * @throws ReadException
      */
     @Override
-    public void login(User user) throws ReadException {
+    public User login(User user) throws ReadException {
           User userDB=null;
           
           //desencriptar contraseña que viene de cliente
@@ -170,9 +191,7 @@ public class UserEJB implements UserEJBLocal{
           byte[] digestCliente = getDigest(pass);
           
         try{
-            userDB=(User) em.createNamedQuery("findUserByLogin")
-                     .setParameter("login", user.getLogin())
-                     .getSingleResult();
+            userDB=findUserByLogin(user.getLogin());
             String digestDB = userDB.getPassword();
             byte[] digest = DatatypeConverter.parseHexBinary(digestDB);
             if (userDB!= null){
@@ -188,9 +207,47 @@ public class UserEJB implements UserEJBLocal{
             throw new ReadException(e.getMessage());
         }
         
+        return userDB;
+    }
+    
+     @Override
+    public User recoverEmail(User user) throws ReadException {
+         
+          
+          
+        try{
+                byte[] pass=desencrypt(DatatypeConverter.parseHexBinary(user.getPassword()));
+                user.setPassword(DatatypeConverter.printHexBinary(getDigest(pass)));
+                updateUser(user);
+                
+                
+                // Create the email message
+                HtmlEmail email = new HtmlEmail();
+                
+                email.setHostName("gmail.com");
+                email.addTo("nerea.jim87@gmail.com", "John Doe");
+                email.setFrom("albergueperronbinary@gmail.com", "Me");
+                email.setSubject("Test email with inline image");
+
+                // set the html message
+                email.setHtmlMsg("<html>Prueba</html>");
+
+                // set the alternative message
+                email.setTextMsg("Your email client does not support HTML messages");
+
+                // send the email
+                email.send();
+            
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "User: Exception Finding user by id:",
+                    e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        
+        return user;
     }
    
-    @Override
+    
     public byte[] desencrypt(byte[] pass){
         FileInputStream fis;
        byte[] decodedMessage = null;
@@ -253,34 +310,6 @@ public class UserEJB implements UserEJBLocal{
                 
              return result;
 	}
-    @Override
-    public void generateKey() {
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(1024);
-			
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-			
-            PublicKey publicKey = keyPair.getPublic();
-            PrivateKey privateKey = keyPair.getPrivate();
-			
-            X509EncodedKeySpec pubspec = new X509EncodedKeySpec(publicKey.getEncoded());
-            FileOutputStream fos1 = new FileOutputStream("albergueperronclient/public.key");
-            fos1.write(pubspec.getEncoded());
-			
-            PKCS8EncodedKeySpec prispec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
-            FileOutputStream fos2 = new FileOutputStream("private.key");
-            fos2.write(prispec.getEncoded());
-            LOGGER.info("Key pair created");
-
-	} catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-	} catch (FileNotFoundException e) {
-            e.printStackTrace();
-	} catch (IOException e) {
-            e.printStackTrace();
-	}
-
-	}
+    
     
 }

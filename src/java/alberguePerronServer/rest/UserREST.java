@@ -155,6 +155,23 @@ public class UserREST {
     }
     
     @GET
+    @Path("email/{email}")
+    @Produces({"application/xml"})
+    public User findUserByEmail(@PathParam("email") String email) {
+        User user=null;
+        try {
+            LOGGER.log(Level.INFO,"");
+            user=ejb.findUserByEmail(email);
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception reading users by login, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+        return user;
+    }
+    
+    @GET
     @Path("log/{login}/{password}")
     @Produces({"application/xml"})
     public User login(@PathParam("login") String login,@PathParam("password") String password) {
@@ -163,13 +180,32 @@ public class UserREST {
             //byte [] passwordB=DatatypeConverter.parseHexBinary(password);
             user.setLogin(login);
             user.setPassword(password);
-            ejb.login(user);
+            user=ejb.login(user);
             
         } catch (ReadException ex) {
             Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
         }
        return user;
     }
+    
+    @GET
+    @Path("recoveryEmail/{email}/{password}")
+    @Produces({"application/xml"})
+    public User passRecovery(@PathParam("email") String email,@PathParam("password") String password) {
+        User user = null;
+        try { 
+            
+            user = ejb.findUserByEmail(email);
+            user.setPassword(password);
+            user=ejb.recoverEmail(user);
+            
+        } catch (ReadException ex) {
+            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return user;
+    }
+    
+    
   
 
   
