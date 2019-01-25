@@ -73,7 +73,7 @@ public class UserREST{
     public void edit(@PathParam("id") String id, User user) {
         try {
             LOGGER.log(Level.INFO,"UserREST: Updating user, ",user);
-            ejb.updateUser(user);
+            ejb.updateUser(user,id);
         } catch (UpdateException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserREST: user updating exception",

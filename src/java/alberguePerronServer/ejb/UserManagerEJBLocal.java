@@ -30,7 +30,7 @@ public interface UserManagerEJBLocal {
      * @param user User: New data to update
      * @throws UpdateException throws when the update fails
      */
-    public void updateUser(User user)throws UpdateException;
+    public void updateUser(User user, String id)throws UpdateException;
 
     /**
      * Finds an user by Id
