@@ -56,6 +56,6 @@ public interface UserEJBLocal {
     public User findUserByLogin(String login)throws ReadException ;
     public User findUserByEmail(String email) throws ReadException;
 
-    public User recoverEmail(User user) throws ReadException;
+    public User updatePassword(User user) throws ReadException;
     
 }

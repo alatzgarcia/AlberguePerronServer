@@ -197,7 +197,7 @@ public class UserREST {
             
             user = ejb.findUserByEmail(email);
             user.setPassword(password);
-            user=ejb.recoverEmail(user);
+            user=ejb.updatePassword(user);
             
         } catch (ReadException ex) {
             Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
