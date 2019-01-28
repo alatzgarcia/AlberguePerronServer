@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,22 +24,28 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name="room",schema="albergueperrondb")
+
+@NamedQueries({
+@NamedQuery(name="findAllRooms",
+    query="SELECT r FROM Room r ORDER BY r.roomNum DESC"
+),
+@NamedQuery(name="findRoomsWithAvailableSpace",
+        query="SELECT r FROM Room r WHERE r.availableSpace <> 0")})
 @XmlRootElement
 public class Room implements Serializable {
 
     private static long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer roomNum;
     private Integer totalSpace;
     private Integer availableSpace;
-    private String status;
+    private Status status;
     @OneToMany(mappedBy="room")
     private List<Incident> incidents;
     @OneToMany(mappedBy="stayRoom")
     private List<Stay> stays;
     /**
-     * gets the number of the room
+     * 
      * @return 
      */
     public Integer getRoomNum() {
@@ -45,7 +53,6 @@ public class Room implements Serializable {
     }
     
     /**
-     * Sets the number of a room
      * @param roomNum the roomNumber to set
      */
     public void setRoomNum(Integer roomNum) {
@@ -53,7 +60,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Gets the total space of the room
      * @return the totalSpace
      */
     public Integer getTotalSpace() {
@@ -61,7 +67,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Sets the total space of the room
      * @param totalSpace the totalSpace to set
      */
     public void setTotalSpace(Integer totalSpace) {
@@ -69,7 +74,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Gets the available space in the room
      * @return the availableSpace
      */
     public Integer getAvailableSpace() {
@@ -77,7 +81,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Sets the available space of the room
      * @param availableSpace the availableSpace to set
      */
     public void setAvailableSpace(Integer availableSpace) {
@@ -85,23 +88,20 @@ public class Room implements Serializable {
     }
     
     /**
-     * Gets the status of the room
      * @return the status
      */
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     /**
-     * Sets the satus of the room
      * @param status the status to set
      */
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     
     /**
-     * Gets the incidents of the room
      * @return the incidents
      */
     @XmlTransient
@@ -110,7 +110,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Sets the incidents of a room
      * @param incidents the incidents to set
      */
     public void setIncidents(List<Incident> incidents) {
@@ -118,7 +117,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Gets all the stays of a room
      * @return the stays
      */
     @XmlTransient
@@ -127,7 +125,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Sets all the stays of a room
      * @param stays the stays to set
      */
     public void setStays(List<Stay> stays) {
@@ -157,6 +154,7 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return "alberguePerronServer.entity.Room[ Room number=" + roomNum + " ]";
+        //return "alberguePerronServer.entity.Room[ Room number=" + roomNum + " ]";
+        return getRoomNum().toString();
     }
 }
