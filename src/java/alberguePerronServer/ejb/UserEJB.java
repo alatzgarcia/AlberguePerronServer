@@ -12,6 +12,8 @@ import alberguePerronServer.exception.DeleteException;
 import alberguePerronServer.exception.ReadException;
 import alberguePerronServer.exception.UpdateException;
 import alberguePerronServer.passwordGen.PasswordGenerator;
+import alberguePerronServer.utils.Crypthography;
+import alberguePerronServer.utils.Email;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -110,20 +112,10 @@ public class UserEJB implements UserEJBLocal{
     @Override
     public void createUser(User user) throws CreateException {
         LOGGER.info("User: Creating user.");
-        try{
-            
-            PasswordGenerator randomPass = new PasswordGenerator.
-                        PasswordGeneratorBuilder().useDigits(true).useUpper(true).
-                        useLower(true).build();
-                String password = randomPass.generate(8);
-                LOGGER.info("contraseña generada: "+password);
-                byte[] pass=DatatypeConverter.parseHexBinary(password);
-                //byte[] pass=password.getBytes();
-                user.setPassword(DatatypeConverter.printHexBinary(getDigest(pass)));
-                //user.setPassword(getDigest(pass).toString());
-                
-                
-            em.persist(user);
+        try{    
+            byte[] passDes = Crypthography.desencrypt(user.getPassword());
+            user.setPassword(DatatypeConverter.printHexBinary(Crypthography.getDigest(passDes)));
+             em.persist(user);
             LOGGER.info("User: User created.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "User Exception creating user.{0}",
@@ -224,28 +216,23 @@ public class UserEJB implements UserEJBLocal{
     public User login(User user) throws ReadException {
           User userDB=null;
           
-          LOGGER.info("Contraseña encriptada en string en servidor");
-          //desencrypt the password tha has been encrypted in the client
-           byte[] pass=desencrypt(DatatypeConverter.parseHexBinary(user.getPassword()));
-           //byte[] pass=desencrypt(user.getPassword().getBytes());
-           LOGGER.info("Contraseña servidor desencriptada en Bytes:"+pass);
-           LOGGER.info("Contraseña servidor desencriptada en String:"+DatatypeConverter.printHexBinary(pass));
+         //desencrypt the password tha has been encrypted in the client
+           byte[] pass=Crypthography.desencrypt(user.getPassword());
+           LOGGER.info("Contraseña: "+DatatypeConverter.printHexBinary(pass));
           //get the digest
-          byte[] digestCliente = getDigest(pass);
-          LOGGER.info("Digest cliente: "+DatatypeConverter.printHexBinary(digestCliente));
+          byte[] digestCliente = Crypthography.getDigest(pass);
+         
           
         try{
             //find the user by the login
             userDB=findUserByLogin(user.getLogin());
             //get the password thats kept in the DB
-            String digestDB = userDB.getPassword();
-            //byte[] digest = DatatypeConverter.parseHexBinary(digestDB);
-            byte[] digest = digestDB.getBytes();
-            LOGGER.info("Digest DB: "+DatatypeConverter.printHexBinary(digest));
+            byte[] digestDB = DatatypeConverter.parseHexBinary(userDB.getPassword());
+        
             
             //Compare the two digest
             if (userDB!= null){
-               if(MessageDigest.isEqual(digestCliente, digest)){
+               if (MessageDigest.isEqual(digestDB, digestCliente)){
                    LOGGER.info("correcto");
                }else{
                    userDB=null;
@@ -276,18 +263,14 @@ public class UserEJB implements UserEJBLocal{
                         useLower(true).build();
                 String password = randomPass.generate(8);
                 //user.setPassword(password);
-                
+                byte[] pass = DatatypeConverter.parseHexBinary(password);
                 LOGGER.info("contraseña generada: "+password);
-                byte[] pass=DatatypeConverter.parseHexBinary(password);
-                //byte[] pass=password.getBytes();
-                user.setPassword(DatatypeConverter.printHexBinary(getDigest(pass)));
-                //user.setPassword(getDigest(pass).toString());
-            //desencrypt the password and set it to the user to update
-            
-           // byte[] pass=DatatypeConverter.parseHexBinary(user.getPassword());
-            //user.setPassword(DatatypeConverter.printHexBinary(getDigest(pass)));
+                
+                user.setPassword(DatatypeConverter.printHexBinary(
+                        Crypthography.getDigest(pass)));
+   
             updateUser(user);
-            sendEmail(user, password);
+            Email.sendEmail(user, password);
             
         }catch(Exception e){
             
@@ -298,182 +281,7 @@ public class UserEJB implements UserEJBLocal{
         return user;
     }
    
-    /**
-     * Method to desencrypt the password
-     * @param pass Encrypted password
-     * @return password
-     */
-    public byte[] desencrypt(byte[] pass){
-        FileInputStream fis;
-       byte[] decodedMessage = null;
-	
-        try {
-            //get the private key
-            fis = new FileInputStream("private.key");
-            byte[] privateKey = new byte[fis.available()];
-            fis.read(privateKey);
-		
-            PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(privateKey);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PrivateKey privKey = keyFactory.generatePrivate(privKeySpec);
-		
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            cipher.init(Cipher.DECRYPT_MODE, privKey);
-            decodedMessage = cipher.doFinal(pass);
-            
-            LOGGER.info("Contraseña desencriptada");
-			
-	} catch (FileNotFoundException e) {
-            LOGGER.severe(e.getMessage());
-	} catch (IOException e) {
-            LOGGER.severe(e.getMessage());
-	}catch (NoSuchAlgorithmException e) {
-            LOGGER.severe(e.getMessage());
-	} catch (InvalidKeySpecException e) {
-            LOGGER.severe(e.getMessage());
-	} catch (NoSuchPaddingException e) {
-            LOGGER.severe(e.getMessage());
-	} catch (InvalidKeyException e) {
-            LOGGER.severe(e.getMessage());
-	} catch (IllegalBlockSizeException e) {
-            LOGGER.severe(e.getMessage());
-	} catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
-        return decodedMessage;
-    }
     
-    /**
-     * Method to digest the password
-     * @param password
-     * @return 
-     */    
-    public byte[] getDigest(byte[] password){
-      
-	String algorithm = "SHA-512";
-        
-        byte[] result = null; 
-	try {
-            MessageDigest md = MessageDigest.getInstance(algorithm);
-            md.update(password);
-            result = md.digest();
-
-        } catch (NoSuchAlgorithmException e) {
-		LOGGER.severe(e.getMessage());
-        }
-                
-        return result;
-    }
-    
-    public void sendEmail(User user,String pass){
-        //get the creedential of the email account
-        ArrayList<String> creedentials=getEmailCredentials();
-        String email =creedentials.get(0);
-        String password =creedentials.get(1);
-         
-                             
-                Properties props = System.getProperties();
-                props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
-                props.put("mail.smtp.user", email);
-                props.put("mail.smtp.clave", password);    //La clave de la cuenta
-                props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
-                props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
-                props.put("mail.smtp.port", "465"); //El puerto SMTP seguro de Google
-         try {   
-                Session session = Session.getDefaultInstance(props);
-                // Create the email message
-                HtmlEmail emailToSend = new HtmlEmail();
-                emailToSend.setAuthentication(email, password);
-                emailToSend.setHostName("smtp.gmail.com");
-        
-                emailToSend.addTo(user.getEmail(), user.getName());
-        
-                emailToSend.setFrom(email, "Albergue Perron");
-                emailToSend.setSubject("Nueva contraseña");
-                emailToSend.setDebug(true);
-                emailToSend.setSSLCheckServerIdentity(true);
-                emailToSend.setStartTLSRequired(true);
-
-                // set the html message
-                emailToSend.setHtmlMsg("<html>Esta es su nueva contraseña: "+pass+
-                        "/n puede modificarla la próxima vez que inicie sesión</html>");
-                
-                // send the email
-                emailToSend.send();
-                
-                } catch (EmailException ex) {
-                   LOGGER.severe(ex.getMessage());
-                }
-    }
-    
-    /**
-     * Method to get the creedentials of the email account that have been
-     * encrypted with a private key
-     * @return 
-     */
-    public ArrayList<String> getEmailCredentials(){
-	ArrayList<String> creedentials = new ArrayList<>();
-	ObjectInputStream ois = null;
-	try {
-            ois = new ObjectInputStream(new FileInputStream("privKey"));
-            SecretKey privateKey =(SecretKey) ois.readObject();
-	   
-	    //email									
-            ois = new ObjectInputStream(new FileInputStream("email"));
-            byte[] iv1 =(byte[]) ois.readObject();
-            byte[] encodedEmail =(byte[]) ois.readObject();
-					
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            IvParameterSpec iv1Param = new IvParameterSpec(iv1);
-            cipher.init(Cipher.DECRYPT_MODE, privateKey, iv1Param);
-            byte[] decodedEmail = cipher.doFinal(encodedEmail);
-            String email = new String(decodedEmail);
-            
-            //password
-            ois = new ObjectInputStream(new FileInputStream("pass"));
-            byte[] iv2 =(byte[]) ois.readObject();
-            byte[] encodedPass =(byte[]) ois.readObject();
-	
-            IvParameterSpec iv2Param = new IvParameterSpec(iv2);
-            cipher.init(Cipher.DECRYPT_MODE, privateKey, iv2Param);
-            byte[] decodedPass = cipher.doFinal(encodedPass);
-            String pass = new String(decodedPass);
-            
-            
-            creedentials.add(0, email);
-            creedentials.add(1, pass);
-					
-            } catch (NoSuchAlgorithmException e) {
-                LOGGER.severe(e.getMessage());
-            } catch (NoSuchPaddingException e) {
-                LOGGER.severe(e.getMessage());
-            } catch (InvalidKeyException e) {
-		LOGGER.severe(e.getMessage());
-            } catch (IllegalBlockSizeException e) {
-		LOGGER.severe(e.getMessage());
-            } catch (BadPaddingException e) { //Clave introducida no es correcta
-		LOGGER.severe(e.getMessage());
-            } catch (FileNotFoundException e) {
-		LOGGER.severe(e.getMessage());
-            } catch (IOException e) {
-		LOGGER.severe(e.getMessage());
-            } catch (ClassNotFoundException e) {
-		LOGGER.severe(e.getMessage());
-            } catch (InvalidAlgorithmParameterException e) {
-		LOGGER.severe(e.getMessage());
-            }finally {
-                if(ois!=null) {
-                    try {
-			ois.close();
-                    } catch (IOException e) {
-			LOGGER.severe(e.getMessage());
-                    }
-                }
-					
-            }
-       
-        return creedentials;
-    }
     
     
 }
