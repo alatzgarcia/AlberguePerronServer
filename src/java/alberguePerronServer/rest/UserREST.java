@@ -189,14 +189,14 @@ public class UserREST {
     }
     
     @GET
-    @Path("recoveryEmail/{email}/{password}")
+    @Path("recoveryEmail/{email}")
     @Produces({"application/xml"})
-    public User passRecovery(@PathParam("email") String email,@PathParam("password") String password) {
+    public User passRecovery(@PathParam("email") String email) {
         User user = null;
         try { 
             
             user = ejb.findUserByEmail(email);
-            user.setPassword(password);
+            //user.setPassword(password);
             user=ejb.updatePassword(user);
             
         } catch (ReadException ex) {
