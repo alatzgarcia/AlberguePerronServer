@@ -24,22 +24,25 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name="room",schema="albergueperrondb")
+
+@NamedQueries({
 @NamedQuery(name="findAllRooms",
     query="SELECT r FROM Room r ORDER BY r.roomNum DESC"
-)
+),
+@NamedQuery(name="findRoomsWithAvailableSpace",
+        query="SELECT r FROM Room r WHERE r.availableSpace <> 0")})
 @XmlRootElement
 public class Room implements Serializable {
 
     private static long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer roomNum;
     private Integer totalSpace;
     private Integer availableSpace;
-    private String status;
+    private Status status;
     @OneToMany(mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(mappedBy="room")
+    @OneToMany(mappedBy="stayRoom")
     private List<Stay> stays;
     /**
      * 
@@ -87,14 +90,14 @@ public class Room implements Serializable {
     /**
      * @return the status
      */
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     
@@ -151,6 +154,7 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return "alberguePerronServer.entity.Room[ Room number=" + roomNum + " ]";
+        //return "alberguePerronServer.entity.Room[ Room number=" + roomNum + " ]";
+        return getRoomNum().toString();
     }
 }

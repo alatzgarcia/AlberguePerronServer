@@ -7,12 +7,16 @@ package alberguePerronServer.exception;
 
 /**
  *
- * @author 2dam
+ * @author Alatz
  */
 public class ReadException extends Exception {
 
+    public ReadException(){
+        
+    }
+    
     public ReadException(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super(message);
     }
     
 }

@@ -54,7 +54,6 @@ public class RoomEJB implements RoomEJBLocal{
         List<Room> rooms=null;
         try{
             LOGGER.info("RoomManager: Reading all rooms.");
-            //TODO -- Create named query on entity
             rooms=em.createNamedQuery("findAllRooms").getResultList();
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "RoomManager: Exception reading all rooms:",
@@ -64,6 +63,21 @@ public class RoomEJB implements RoomEJBLocal{
         return rooms;
     }
    
+    @Override
+    public List<Room> findRoomsWithAvailableSpace() throws ReadException{
+        List<Room> rooms = null;
+        try{
+            LOGGER.info("RoomManager: Reading rooms with available space.");
+            rooms=em.createNamedQuery("findRoomsWithAvailableSpace")
+                    .getResultList();
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "RoomManager: Exception reading"
+                    + "rooms with available space.");
+            throw new ReadException(e.getMessage());
+        }
+        return rooms;
+    }
+    
     @Override
     public void createRoom(Room room) throws CreateException {
         LOGGER.info("RoomManager: Creating room.");

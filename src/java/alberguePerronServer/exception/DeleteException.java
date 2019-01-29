@@ -7,12 +7,16 @@ package alberguePerronServer.exception;
 
 /**
  *
- * @author 2dam
+ * @author Alatz
  */
 public class DeleteException extends Exception {
 
+    public DeleteException(){
+        
+    }
+    
     public DeleteException(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super(message);
     }
     
 }

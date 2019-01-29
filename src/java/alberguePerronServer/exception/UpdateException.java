@@ -7,12 +7,16 @@ package alberguePerronServer.exception;
 
 /**
  *
- * @author 2dam
+ * @author Alatz
  */
 public class UpdateException extends Exception {
 
+    public UpdateException(){
+        
+    }
+    
     public UpdateException(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super(message);
     }
     
 }

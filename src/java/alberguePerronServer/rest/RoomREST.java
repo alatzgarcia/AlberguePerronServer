@@ -36,7 +36,7 @@ public class RoomREST {
     private RoomEJBLocal ejb;
     
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_XML)
     public void create(Room entity) {
         try {
             ejb.createRoom(entity);
@@ -46,9 +46,8 @@ public class RoomREST {
     }
 
     @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Room entity) {
+    @Consumes(MediaType.APPLICATION_XML)
+    public void edit(Room entity) {
         try {
             ejb.updateRoom(entity);
         } catch (UpdateException ex) {
@@ -68,7 +67,7 @@ public class RoomREST {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_XML)
     public Room find(@PathParam("id") Integer id) {
         Room room = null;
         try {
@@ -80,11 +79,24 @@ public class RoomREST {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_XML)
     public List<Room> findAll() {
         List<Room> rooms = null;
         try {
             rooms = ejb.findAllRooms();
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+        return rooms;
+    }
+    
+    @GET
+    @Path("availableRooms")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Room> findRoomsWithAvailableSpace() {
+        List<Room> rooms = null;
+        try {
+            rooms = ejb.findRoomsWithAvailableSpace();
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }

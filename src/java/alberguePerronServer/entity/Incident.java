@@ -8,6 +8,7 @@ package alberguePerronServer.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,13 +37,17 @@ public class Incident implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String incidentType;
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="INCI_USERS", schema="albergueperrondb")
     private List<User> implicateds;
     private String description;
     @ManyToOne
     private Room room;
 
+    public void setIdNull(){
+        this.id = null;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -68,7 +73,7 @@ public class Incident implements Serializable {
     /**
      * @return the implicateds
      */
-    @XmlTransient
+    //@XmlTransient
     public List<User> getImplicateds() {
         return implicateds;
     }

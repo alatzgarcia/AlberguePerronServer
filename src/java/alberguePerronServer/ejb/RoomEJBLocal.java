@@ -21,6 +21,7 @@ import javax.ejb.Local;
 public interface RoomEJBLocal {
     public Room findRoomById(Integer roomNum) throws ReadException;
     public List<Room> findAllRooms() throws ReadException;
+    public List<Room> findRoomsWithAvailableSpace() throws ReadException;
     public void createRoom(Room room) throws CreateException;
     public void updateRoom(Room room) throws UpdateException;
     public void deleteRoom(Room room) throws DeleteException;

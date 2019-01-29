@@ -30,7 +30,7 @@ public class Stay implements Serializable {
     @ManyToOne
     private User guest;
     @ManyToOne
-    private Room room;
+    private Room stayRoom;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date date;
     
@@ -62,15 +62,15 @@ public class Stay implements Serializable {
      * Gets room value for stay.
      * @return The room value.
      */
-    public Room getRoom() {
-        return room;
+    public Room getStayRoom() {
+        return stayRoom;
     }
 
     /**
-     * @param room the room to set
+     * @param stayRoom the room to set
      */
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setStayRoom(Room stayRoom) {
+        this.stayRoom = stayRoom;
     }
 
     /**

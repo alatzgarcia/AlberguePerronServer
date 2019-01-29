@@ -40,6 +40,7 @@ public class IncidentREST {
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Incident entity) {
         try {
+            entity.setIdNull();
             ejb.createIncident(entity);
         } catch (CreateException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -47,9 +48,8 @@ public class IncidentREST {
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, Incident entity) {
+    public void edit(Incident entity) {
         try {
             ejb.updateIncident(entity);
         } catch (UpdateException ex) {
