@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -34,6 +35,7 @@ public class Stay implements Serializable {
     @ManyToOne
     private User guest;
     @ManyToOne
+    @XmlElement(name="room")
     private Room stayRoom;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date date;

@@ -6,6 +6,7 @@
 package alberguePerronServer.rest;
 
 import alberguePerronServer.ejb.UserManagerEJBLocal;
+import alberguePerronServer.entity.Privilege;
 import alberguePerronServer.entity.User;
 import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
@@ -143,8 +144,8 @@ public class UserREST{
     
     @GET
     @Path("privilege/{privilege}")
-    @Produces({MediaType.APPLICATION_XML})
-    public List<User> findByPrivilege(@PathParam("privilege") String privilege) {
+    @Produces({"application/xml"})
+    public List<User> findByPrivilege(@PathParam("privilege") Privilege privilege) {
         List<User> users=null;
         try{
             LOGGER.log(Level.INFO,"UserREST: Find all users by privilege.");

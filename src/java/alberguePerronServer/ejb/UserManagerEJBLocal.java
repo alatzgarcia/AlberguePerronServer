@@ -5,6 +5,7 @@
  */
 package alberguePerronServer.ejb;
 
+import alberguePerronServer.entity.Privilege;
 import alberguePerronServer.entity.User;
 import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
@@ -54,6 +55,6 @@ public interface UserManagerEJBLocal {
      */
     public List<User> findAllUsers() throws ReadException;
     
-    public List<User> findAllByPrivilege(String privilege) throws ReadException;
+    public List<User> findAllByPrivilege(Privilege privilege) throws ReadException;
     
 }
