@@ -225,7 +225,15 @@ public class UserEJB implements UserEJBLocal{
           
         try{
             //find the user by the login
-            userDB=findUserByLogin(user.getLogin());
+            try{
+                user=(User) em.createNamedQuery("findUserByLogin")
+                     .setParameter("login", user.getLogin())
+                     .getSingleResult();
+            }catch(Exception e){
+                LOGGER.log(Level.SEVERE, "",
+                        e.getMessage());
+                throw new ReadException(e.getMessage());
+            }
             //get the password thats kept in the DB
             byte[] digestDB = DatatypeConverter.parseHexBinary(userDB.getPassword());
         
