@@ -36,11 +36,11 @@ public class Email{
             Logger.getLogger("");
     
     /**
-     * Method that sends an email
+     * Method that sends an email in the recovery
      * @param user the user
      * @param pass the password
      */
-     public static void sendEmail(User user,String pass){
+     public static void sendEmailRecovery(User user,String pass){
         //get the creedential of the email account
         ArrayList<String> creedentials=getEmailCredentials();
         String email =creedentials.get(0);
@@ -71,7 +71,47 @@ public class Email{
 
                 // set the html message
                 emailToSend.setHtmlMsg("<html>Esta es su nueva contraseña: "+pass+
-                        "/n puede modificarla la próxima vez que inicie sesión</html>");
+                        " puede modificarla la próxima vez que inicie sesión</html>");
+                
+                // send the email
+                emailToSend.send();
+                
+                } catch (EmailException ex) {
+                   LOGGER.severe(ex.getMessage());
+                }
+    }
+     
+     public static void sendEmailChange(User user){
+        //get the creedential of the email account
+        ArrayList<String> creedentials=getEmailCredentials();
+        String email =creedentials.get(0);
+        String password =creedentials.get(1);
+         
+                             
+                Properties props = System.getProperties();
+                props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
+                props.put("mail.smtp.user", email);
+                props.put("mail.smtp.clave", password);    //La clave de la cuenta
+                props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+                props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+                props.put("mail.smtp.port", "465"); //El puerto SMTP seguro de Google
+         try {   
+                Session session = Session.getDefaultInstance(props);
+                // Create the email message
+                HtmlEmail emailToSend = new HtmlEmail();
+                emailToSend.setAuthentication(email, password);
+                emailToSend.setHostName("smtp.gmail.com");
+        
+                emailToSend.addTo(user.getEmail(), user.getName());
+        
+                emailToSend.setFrom(email, "Albergue Perron");
+                emailToSend.setSubject("Cambio de contraseña");
+                emailToSend.setDebug(true);
+                emailToSend.setSSLCheckServerIdentity(true);
+                emailToSend.setStartTLSRequired(true);
+
+                // set the html message
+                emailToSend.setHtmlMsg("<html>Su contraseña a sido cambiada</html>");
                 
                 // send the email
                 emailToSend.send();

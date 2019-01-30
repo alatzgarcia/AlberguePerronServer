@@ -6,7 +6,6 @@
 package alberguePerronServer.rest;
 
 import alberguePerronServer.ejb.UserEJBLocal;
-import alberguePerronServer.entity.Pet;
 import alberguePerronServer.entity.User;
 import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
@@ -26,60 +25,70 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.xml.bind.DatatypeConverter;
 
 /**
+ * RESTful web service class exposing CRUD operations for User entities.
  *
  * @author Nerea JImenez
  */
-
 @Path("users")
 public class UserREST {
 
-/**
+    /**
      * Logger for class methods.
      */
-    private static final Logger LOGGER =
-            Logger.getLogger("alberguPerronServer");
+    private static final Logger LOGGER
+            = Logger.getLogger("alberguPerronServer");
     @PersistenceContext(unitName = "AlberguePerronServerPU")
     /**
      * EJB reference for business logic object.
      */
     @EJB
     private UserEJBLocal ejb;
+
     /**
      * RESTful POST method for creating User objects
+     *
      * @param user The user
      */
     @POST
     @Consumes({"application/xml"})
     public void create(User user) {
-        LOGGER.log(Level.INFO,"UserRESTful service: create {0}.",user);
+        LOGGER.log(Level.INFO, "UserRESTful service: create {0}.", user);
         try {
             ejb.createUser(user);
         } catch (CreateException ex) {
-            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception creating user, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
         }
     }
+
     /**
      * RESTful PUT method for updating User objects
+     *
      * @param user The user
      */
     @PUT
     @Consumes({"application/xml"})
     public void update(User user) {
-        LOGGER.log(Level.INFO,"UserRESTful service: update {0}.",user);
+        LOGGER.log(Level.INFO, "UserRESTful service: update {0}.", user);
         try {
-            
-               ejb.updateUser(user);
-            
-        
+
+            ejb.updateUser(user);
+
         } catch (UpdateException ex) {
-            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception updating user, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
         }
     }
+
     /**
      * RESTful DELETE method for deleting users by id
+     *
      * @param id The id for the user
      */
     @DELETE
@@ -87,28 +96,30 @@ public class UserREST {
     //@Consumes({"application/xml"})
     public void delete(@PathParam("id") String id) {
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: delete User by id={0}.",id);
+            LOGGER.log(Level.INFO, "UserRESTful service: delete User by id={0}.", id);
             ejb.deleteUser(ejb.findUserById(id));
         } catch (ReadException | DeleteException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserRESTful service: Exception deleting user by id, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
-        } 
+        }
     }
+
     /**
      * RESTful GET method for reading Users by id
+     *
      * @param id The id for the user
-     * @return The User object 
+     * @return The User object
      */
     @GET
     @Path("{id}")
     @Produces({"application/xml"})
     public User find(@PathParam("id") String id) {
-        User user=null;
+        User user = null;
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: find User by id={0}.",id);
-            user=ejb.findUserById(id);
+            LOGGER.log(Level.INFO, "UserRESTful service: find User by id={0}.", id);
+            user = ejb.findUserById(id);
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserRESTful service: Exception reading user by id, {0}",
@@ -117,17 +128,19 @@ public class UserREST {
         }
         return user;
     }
+
     /**
      * RESTful GET method for reading all User objects
+     *
      * @return A List of User objects
      */
     @GET
     @Produces({"application/xml"})
     public List<User> findAll() {
-        List<User> users=null;
+        List<User> users = null;
         try {
-            LOGGER.log(Level.INFO,"UserRESTful service: find all users.");
-            users=ejb.findAllUsers();
+            LOGGER.log(Level.INFO, "UserRESTful service: find all users.");
+            users = ejb.findAllUsers();
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserRESTful service: Exception reading all users, {0}",
@@ -136,32 +149,15 @@ public class UserREST {
         }
         return users;
     }
-    
-    @GET
-    @Path("login/{login}")
-    @Produces({"application/xml"})
-    public User findUserByLogin(@PathParam("login") String login) {
-        User user=null;
-        try {
-            LOGGER.log(Level.INFO,"");
-            user=ejb.findUserByLogin(login);
-        } catch (ReadException ex) {
-            LOGGER.log(Level.SEVERE,
-                    "UserRESTful service: Exception reading users by login, {0}",
-                    ex.getMessage());
-            throw new InternalServerErrorException(ex);
-        }
-        return user;
-    }
-    
+
     @GET
     @Path("email/{email}")
     @Produces({"application/xml"})
     public User findUserByEmail(@PathParam("email") String email) {
-        User user=null;
+        User user = null;
         try {
-            LOGGER.log(Level.INFO,"");
-            user=ejb.findUserByEmail(email);
+            LOGGER.log(Level.INFO, "");
+            user = ejb.findUserByEmail(email);
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserRESTful service: Exception reading users by login, {0}",
@@ -170,45 +166,61 @@ public class UserREST {
         }
         return user;
     }
-    
+
     @GET
     @Path("log/{login}/{password}")
     @Produces({"application/xml"})
-    public User login(@PathParam("login") String login,@PathParam("password") String password) {
+    public User login(@PathParam("login") String login, @PathParam("password") String password) {
         User user = new User();
-        try { 
-            //byte [] passwordB=DatatypeConverter.parseHexBinary(password);
+        try {
             user.setLogin(login);
             user.setPassword(password);
-            user=ejb.login(user);
-            
+            user = ejb.login(user);
+
         } catch (ReadException ex) {
-            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
+             LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception reading users by login, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
         }
-       return user;
+        return user;
     }
-    
+
     @GET
     @Path("recoveryEmail/{email}")
     @Produces({"application/xml"})
     public User passRecovery(@PathParam("email") String email) {
         User user = null;
-        try { 
-            
-            user = ejb.findUserByEmail(email);
-            //user.setPassword(password);
-            user=ejb.updatePassword(user);
-            
-        } catch (ReadException ex) {
-            Logger.getLogger(UserREST.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       return user;
-    }
-    
-    
-  
+        try {
 
-  
-    
-    
+            user = ejb.findUserByEmail(email);
+            user = ejb.recoverPassword(user);
+
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception reading users by login, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+        return user;
+    }
+
+    @GET
+    @Path("changepass/{login}/{password}")
+    @Produces({"application/xml"})
+    public User changePassword(@PathParam("login") String login, @PathParam("password") String password) {
+        User user = new User();
+        try {
+            user.setLogin(login);
+            user.setPassword(password);
+            user = ejb.changePassword(user);
+
+        } catch (UpdateException ex) {
+             LOGGER.log(Level.SEVERE,
+                    "UserRESTful service: Exception reading users by login, {0}",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+        return user;
+    }
 }

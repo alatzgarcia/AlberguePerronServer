@@ -52,10 +52,11 @@ public interface UserEJBLocal {
     public void deleteUser(User user) throws DeleteException;
 
     public User login(User user) throws ReadException ;
-    
-    public User findUserByLogin(String login)throws ReadException ;
+
     public User findUserByEmail(String email) throws ReadException;
 
-    public User updatePassword(User user) throws ReadException;
+    public User recoverPassword(User user) throws ReadException;
+    
+    public User changePassword(User user) throws UpdateException ;
     
 }
