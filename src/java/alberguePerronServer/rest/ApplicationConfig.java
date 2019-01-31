@@ -30,7 +30,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(alberguePerronServer.rest.IncidentREST.class);
+        resources.add(alberguePerronServer.rest.PetREST.class);
         resources.add(alberguePerronServer.rest.RoomREST.class);
+        resources.add(alberguePerronServer.rest.StayREST.class);
         resources.add(alberguePerronServer.rest.UserREST.class);
     }
     

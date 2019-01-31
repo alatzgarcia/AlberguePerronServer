@@ -16,13 +16,13 @@ import javax.ejb.Local;
 
 /**
  *
- * @author 2dam
+ * @author Nerea, Diego
  */
 @Local
 public interface UserEJBLocal {
     /**
-     * Finds a User by its login. 
-     * @param login The login for the user
+     * Finds a User by its id. 
+     * @param id the id
      * @return The User object
      * @throws ReadException If there is any Exception
      */
@@ -34,9 +34,9 @@ public interface UserEJBLocal {
      */
     public List<User> findAllUsers() throws ReadException;
     /**
-     * Finds a List of User objects 
-     * @param user The User
-     * @throws alberguePerronServer.exception.CreateException
+     * Creates an user
+     * @param user The user object
+     * @throws CreateException If there is any Exception 
      */
     public void createUser(User user) throws CreateException;
     /**
@@ -47,16 +47,37 @@ public interface UserEJBLocal {
     public void updateUser(User user) throws UpdateException;
     /**
      * Deletes a user's data in the underlying application storage. 
-     * @param user The {@link User} object containing the user data. 
+     * @param user The User object containing the user data. 
      * @throws DeleteException If there is any Exception during processing.
      */
     public void deleteUser(User user) throws DeleteException;
-    
+    /**
+     * login of the user
+     * @param user The User object
+     * @return The UserObject
+     * @throws ReadException 
+     */
     public User login(User user) throws ReadException;
 
+    /**
+     * Finds a user by its email
+     * @param email the user's email
+     * @return The UserObject
+     * @throws ReadException 
+     */
     public User findUserByEmail(String email) throws ReadException;
-
+    /**
+     * Method for the recovery of the password
+     * @param user The User object
+     * @return The User object
+     * @throws ReadException 
+     */
     public User recoverPassword(User user) throws ReadException;
+    /**
+     * Method for the change of the password
+     * @param user The User object
+     * @return The User object 
+     */
     
     public User changePassword(User user) throws UpdateException;
     

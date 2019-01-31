@@ -89,11 +89,11 @@ public class UserREST {
      */
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML})
+    @Consumes({"application/xml"})
     public void edit(@PathParam("id") String id, User user) {
         try {
             LOGGER.log(Level.INFO,"UserREST: Updating user, ",user);
-            ejb.updateUser(user,id);
+            ejb.updateUser(user);
         } catch (UpdateException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserREST: user updating exception",
@@ -160,6 +160,11 @@ public class UserREST {
         }
         return users;
     }
+    /**
+     * RESTful GET method for finding an user by its email
+     * @param email The email
+     * @return The user object
+     */
     
     @GET
     @Path("email/{email}")
@@ -178,6 +183,12 @@ public class UserREST {
         return user;
     }
 
+    /**
+     * RESTful GET method for the login
+     * @param login The login of the user
+     * @param password The password of the user
+     * @return The user object
+     */
     @GET
     @Path("log/{login}/{password}")
     @Produces({"application/xml"})
@@ -197,6 +208,11 @@ public class UserREST {
         return user;
     }
 
+    /**
+     * RESTful GET method for the recovery of the password
+     * @param email The email
+     * @return The user object
+     */
     @GET
     @Path("recoveryEmail/{email}")
     @Produces({"application/xml"})
@@ -216,6 +232,12 @@ public class UserREST {
         return user;
     }
 
+    /**
+     * RESTful GET method for the change of the password
+     * @param login The login of the user
+     * @param password The new password
+     * @return The user object
+     */
     @GET
     @Path("changepass/{login}/{password}")
     @Produces({"application/xml"})

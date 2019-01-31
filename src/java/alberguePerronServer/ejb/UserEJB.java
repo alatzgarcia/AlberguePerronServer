@@ -12,7 +12,13 @@ import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
 import alberguePerronServer.exception.ReadException;
 import alberguePerronServer.exception.UpdateException;
+import alberguePerronServer.utils.Crypthography;
+import alberguePerronServer.utils.Email;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -72,7 +78,23 @@ public class UserEJB implements UserEJBLocal{
     public void createUser(User user) throws CreateException {
         LOGGER.info("User: Creating user.");
         try{
+            //New random password
+            String[] symbols = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+            int length = 10;
+            Random random = SecureRandom.getInstance("SHA1PRNG");
+            StringBuilder stringBuilder = new StringBuilder(length);
+            for (int i = 0; i < length; i++) {
+                int indexRandom = random.nextInt(symbols.length);
+                stringBuilder.append(symbols[indexRandom]);
+            }
+            String pass = stringBuilder.toString();
+
+            user.setPassword(DatatypeConverter.printHexBinary(
+                    Crypthography.getDigest(pass.getBytes())));
+
             em.persist(user);
+            Email.sendEmailRecovery(user, pass);
+            
             LOGGER.info("User: User created.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserManager: Exception creating user.{0}",
@@ -202,6 +224,7 @@ public class UserEJB implements UserEJBLocal{
                     Crypthography.getDigest(pass.getBytes())));
 
             updateUser(user);
+            //send an email with the new password
             Email.sendEmailRecovery(user, pass);
 
         } catch (UpdateException | NoSuchAlgorithmException e) {
@@ -229,6 +252,7 @@ public class UserEJB implements UserEJBLocal{
 
         try {
             updateUser(user);
+            //send an email with the new password
             Email.sendEmailChange(user);
         } catch (UpdateException e) {
             LOGGER.severe(e.getMessage());

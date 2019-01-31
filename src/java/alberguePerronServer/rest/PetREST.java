@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
 
 /**
  *
- * @author 2dam
+ * @author Iker
  */
 @Path("pet")
 public class PetREST {

@@ -21,7 +21,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author 2dam
+ * @author Iker
  */
 @Stateless
 public class PetManagerEJB implements PetManagerEJBLocal {
