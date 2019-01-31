@@ -18,10 +18,14 @@ import javax.xml.bind.annotation.XmlElement;
 
 /**
  *
- * @author Alatz
+ * @author Diego
  */
 @Entity
 @Table(name="stay",schema="albergueperrondb")
+@NamedQuery(name="findAllStays", query="SELECT s FROM Stay s ORDER BY s.id ASC")
+@Table(name="stay",schema="albergueperrondb")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)//preguntar
 public class Stay implements Serializable {
 
     private static long serialVersionUID = 1L;

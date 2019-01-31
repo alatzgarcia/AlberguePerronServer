@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * IncidentEJB class for the AlberguePerronServer application
  * @author Alatz
  */
 @Stateless
@@ -35,6 +35,12 @@ public class IncidentEJB implements IncidentEJBLocal {
     @PersistenceContext
     private EntityManager em;
     
+    /**
+     * Finds an incident by its id
+     * @param id the incident id
+     * @return the incident
+     * @throws ReadException 
+     */
     @Override
     public Incident findIncidentById(Integer id) throws ReadException {
         Incident incident=null;
@@ -50,6 +56,11 @@ public class IncidentEJB implements IncidentEJBLocal {
         return incident;
     }
     
+    /**
+     * Finds all incidents
+     * @return the incidents
+     * @throws ReadException 
+     */
     @Override
     public List<Incident> findAllIncidents() throws ReadException {
         List<Incident> incidents=null;
@@ -65,6 +76,11 @@ public class IncidentEJB implements IncidentEJBLocal {
         return incidents;
     }
    
+    /**
+     * Creates a new incident
+     * @param incident the incident object
+     * @throws CreateException 
+     */
     @Override
     public void createIncident(Incident incident) throws CreateException {
         LOGGER.info("IncidentManager: Creating incident.");
@@ -78,6 +94,11 @@ public class IncidentEJB implements IncidentEJBLocal {
         }
     }
     
+    /**
+     * Updates an incident
+     * @param incident the incident object
+     * @throws UpdateException 
+     */
     @Override
     public void updateIncident(Incident incident) throws UpdateException {
         LOGGER.info("IncidentManager: Updating incident.");
@@ -93,6 +114,11 @@ public class IncidentEJB implements IncidentEJBLocal {
         }
     }
     
+    /**
+     * Deletes an incident
+     * @param incident the incident object
+     * @throws DeleteException 
+     */
     @Override
     public void deleteIncident(Incident incident) throws DeleteException {
         LOGGER.info("IncidentManager: Deleting incident.");

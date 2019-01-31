@@ -45,8 +45,9 @@ public class Room implements Serializable {
     private List<Incident> incidents;
     @OneToMany(mappedBy="stayRoom", cascade=CascadeType.REMOVE, orphanRemoval = true)
     private List<Stay> stays;
+    
     /**
-     * 
+     * Getter for the roomNum attribute
      * @return 
      */
     public Integer getRoomNum() {
@@ -54,6 +55,7 @@ public class Room implements Serializable {
     }
     
     /**
+     * Setter for the roomNum attribute
      * @param roomNum the roomNumber to set
      */
     public void setRoomNum(Integer roomNum) {
@@ -61,6 +63,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Getter for the totalSpace attribute
      * @return the totalSpace
      */
     public Integer getTotalSpace() {
@@ -68,6 +71,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Setter for the totalSpace attribute
      * @param totalSpace the totalSpace to set
      */
     public void setTotalSpace(Integer totalSpace) {
@@ -75,6 +79,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Getter for the availableSpace attribute
      * @return the availableSpace
      */
     public Integer getAvailableSpace() {
@@ -82,6 +87,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Getter for the availableSpace attribute
      * @param availableSpace the availableSpace to set
      */
     public void setAvailableSpace(Integer availableSpace) {
@@ -89,6 +95,7 @@ public class Room implements Serializable {
     }
     
     /**
+     * Getter for the status attribute
      * @return the status
      */
     public Status getStatus() {
@@ -96,6 +103,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Setter for the status attribute
      * @param status the status to set
      */
     public void setStatus(Status status) {
@@ -103,6 +111,7 @@ public class Room implements Serializable {
     }
     
     /**
+     * Getter for the incidents attribute
      * @return the incidents
      */
     @XmlTransient
@@ -111,6 +120,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Setter for the incidents attribute
      * @param incidents the incidents to set
      */
     public void setIncidents(List<Incident> incidents) {
@@ -118,6 +128,7 @@ public class Room implements Serializable {
     }
 
     /**
+     * Getter for the stays attribute
      * @return the stays
      */
     @XmlTransient
@@ -126,12 +137,17 @@ public class Room implements Serializable {
     }
 
     /**
+     * Setter for the stays attribute
      * @param stays the stays to set
      */
     public void setStays(List<Stay> stays) {
         this.stays = stays;
     }
     
+    /**
+     * Hash code method
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -139,6 +155,12 @@ public class Room implements Serializable {
         return hash;
     }
 
+    /**
+     * Compares two objects to check if they are of type Room and if they
+     * are the same object
+     * @param object
+     * @return 
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -153,6 +175,10 @@ public class Room implements Serializable {
         return true;
     }
 
+    /**
+     * Returns a string representing a room object
+     * @return the room as a string
+     */
     @Override
     public String toString() {
         //return "alberguePerronServer.entity.Room[ Room number=" + roomNum + " ]";

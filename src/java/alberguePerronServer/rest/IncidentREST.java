@@ -32,10 +32,20 @@ import javax.ws.rs.core.MediaType;
 @Path("incident")
 public class IncidentREST {
     
+    /**
+     * Logger for the class
+     */
     private static final Logger LOGGER = Logger.getLogger("incidentrest");
+    /**
+     * EJB object
+     */
     @EJB
     private IncidentEJBLocal ejb;
     
+    /**
+     * Creates a new incident
+     * @param entity incident object
+     */
     @POST
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Incident entity) {
@@ -47,6 +57,10 @@ public class IncidentREST {
         }
     }
 
+    /**
+     * Updates an incident
+     * @param entity incident object
+     */
     @PUT
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(Incident entity) {
@@ -57,6 +71,10 @@ public class IncidentREST {
         }
     }
 
+    /**
+     * Deletes an incident by its id
+     * @param id id of the incident to delete
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
@@ -67,6 +85,11 @@ public class IncidentREST {
         }
     }
 
+    /**
+     * Finds an incident by its id
+     * @param id id of the incident
+     * @return the incident object
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
@@ -80,6 +103,10 @@ public class IncidentREST {
         return incident;
     }
 
+    /**
+     * Finds all incidents
+     * @return the list of incidents
+     */
     @GET
     @Produces({MediaType.APPLICATION_XML})
     public List<Incident> findAll() {

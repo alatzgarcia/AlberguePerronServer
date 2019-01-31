@@ -12,6 +12,7 @@ import alberguePerronServer.exception.CreateException;
 import alberguePerronServer.exception.DeleteException;
 import alberguePerronServer.exception.ReadException;
 import alberguePerronServer.exception.UpdateException;
+import java.awt.PageAttributes.MediaType;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,7 @@ import javax.ws.rs.Produces;
 
 /**
  *
- * @author Nerea JImenez
+ * @author Nerea JImenez, Diego
  */
 
 @Path("users")
@@ -80,6 +81,27 @@ public class UserREST {
             throw new InternalServerErrorException(ex);
         }
     }
+    
+    /**
+     * Updates an user by ID
+     * @param id String: The id by which user is searched
+     * @param user User: The data of the update of the user.
+     */
+    @PUT
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML})
+    public void edit(@PathParam("id") String id, User user) {
+        try {
+            LOGGER.log(Level.INFO,"UserREST: Updating user, ",user);
+            ejb.updateUser(user,id);
+        } catch (UpdateException ex) {
+            LOGGER.log(Level.SEVERE,
+                    "UserREST: user updating exception",
+                    ex.getMessage());
+            throw new InternalServerErrorException(ex);
+        }
+    }
+    
     /**
      * RESTful DELETE method for deleting users by id
      * @param id The id for the user

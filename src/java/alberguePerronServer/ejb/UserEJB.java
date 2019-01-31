@@ -22,7 +22,7 @@ import javax.xml.bind.DatatypeConverter;
 
 /**
  *
- * @author Nerea Jimenez
+ * @author Nerea Jimenez, Diego
  */
 @Stateless
 public class UserEJB implements UserEJBLocal{
@@ -244,13 +244,6 @@ public class UserEJB implements UserEJBLocal{
         try{
             LOGGER.info("UserEJB: Reading users by privilege.");
             users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", privilege).getResultList();
-            /*if(privilege.equals("0")){
-                users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", Privilege.USER).getResultList();
-            }else if(privilege.equals("1")){
-                users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", Privilege.EMPLOYEE).getResultList();
-            }else if(privilege.equals("2")){
-                users=em.createNamedQuery("findUserByPrivilege").setParameter("privilege", Privilege.ADMIN).getResultList();
-            }*/
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserEJB: Exception reading by privilege:",
                     e.getMessage());

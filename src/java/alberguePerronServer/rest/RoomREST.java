@@ -26,15 +26,25 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- *
- * @author 2dam
+ * RoomREST class for the AlberguePerronServer application
+ * @author Alatz
  */
 @Path("room")
 public class RoomREST {
+    /**
+     * Logger for the class
+     */
     private static final Logger LOGGER = Logger.getLogger("roomrest");
+    /**
+     * EJB Object
+     */
     @EJB
     private RoomEJBLocal ejb;
     
+    /**
+     * Creates a new room
+     * @param entity room object
+     */
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void create(Room entity) {
@@ -45,6 +55,10 @@ public class RoomREST {
         }
     }
 
+    /**
+     * Updates a room
+     * @param entity room to update
+     */
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public void edit(Room entity) {
@@ -55,6 +69,10 @@ public class RoomREST {
         }
     }
 
+    /**
+     * Deletes a room
+     * @param id id of the room to delete
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
@@ -65,6 +83,11 @@ public class RoomREST {
         }
     }
 
+    /**
+     * Finds a room by its id
+     * @param id id of the room
+     * @return the room object
+     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_XML)
@@ -78,6 +101,10 @@ public class RoomREST {
         return room;
     }
 
+    /**
+     * Finds all rooms
+     * @return all room
+     */
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public List<Room> findAll() {
@@ -90,6 +117,10 @@ public class RoomREST {
         return rooms;
     }
     
+    /**
+     * Finds rooms with availableSpace different to 0
+     * @return the rooms with available space
+     */
     @GET
     @Path("availableRooms")
     @Produces(MediaType.APPLICATION_XML)

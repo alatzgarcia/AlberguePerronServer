@@ -18,8 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
- * @author 2dam
+ * RoomEJB class for the AlberguePerronServer application
+ * @author Alatz
  */
 @Stateless
 public class RoomEJB implements RoomEJBLocal{
@@ -33,7 +33,12 @@ public class RoomEJB implements RoomEJBLocal{
      */
     @PersistenceContext
     private EntityManager em;
-    
+    /**
+     * Finds a room by its id
+     * @param roomNum the room id
+     * @return the room object
+     * @throws ReadException 
+     */
     @Override
     public Room findRoomById(Integer roomNum) throws ReadException {
         Room room=null;
@@ -49,6 +54,11 @@ public class RoomEJB implements RoomEJBLocal{
         return room;
     }
     
+    /**
+     * Finds all rooms
+     * @return the rooms
+     * @throws ReadException 
+     */
     @Override
     public List<Room> findAllRooms() throws ReadException {
         List<Room> rooms=null;
@@ -63,6 +73,11 @@ public class RoomEJB implements RoomEJBLocal{
         return rooms;
     }
    
+    /**
+     * Finds rooms with availableSpace different to 0
+     * @return the rooms with available space
+     * @throws ReadException 
+     */
     @Override
     public List<Room> findRoomsWithAvailableSpace() throws ReadException{
         List<Room> rooms = null;
@@ -78,6 +93,11 @@ public class RoomEJB implements RoomEJBLocal{
         return rooms;
     }
     
+    /**
+     * Creates a new room
+     * @param room the new room object
+     * @throws CreateException 
+     */
     @Override
     public void createRoom(Room room) throws CreateException {
         LOGGER.info("RoomManager: Creating room.");
@@ -91,6 +111,11 @@ public class RoomEJB implements RoomEJBLocal{
         }
     }
     
+    /**
+     * Updates a room
+     * @param room the room object
+     * @throws UpdateException 
+     */
     @Override
     public void updateRoom(Room room) throws UpdateException {
         LOGGER.info("RoomManager: Updating room.");
@@ -106,6 +131,11 @@ public class RoomEJB implements RoomEJBLocal{
         }
     }
     
+    /**
+     * Deletes a room
+     * @param room the room to delete
+     * @throws DeleteException 
+     */
     @Override
     public void deleteRoom(Room room) throws DeleteException {
         LOGGER.info("RoomManager: Deleting room.");

@@ -14,14 +14,41 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
- *
+ * IncidentEJBLocal class for the AlberguePerronServer application
  * @author Alatz
  */
 @Local
 public interface IncidentEJBLocal {
+    /**
+     * Finds an incident by its id
+     * @param id
+     * @return the incident
+     * @return
+     * @throws ReadException 
+     */
     public Incident findIncidentById(Integer id) throws ReadException;
+    /**
+     * Finds all incidents
+     * @return the incidents
+     * @throws ReadException 
+     */
     public List<Incident> findAllIncidents() throws ReadException;
+    /**
+     * Creates a new incident
+     * @param incident the incident object
+     * @throws CreateException 
+     */
     public void createIncident(Incident incident) throws CreateException;
-    public void updateIncident(Incident incident) throws UpdateException;
+    /**
+     * Updates an incident
+     * @param incident the incident object
+     * @throws UpdateException 
+     */
+    public void updateIncident(Incident incident) throws UpdateException;  
+    /**
+     * Deletes an incident
+     * @param incident the incident object
+     * @throws DeleteException 
+     */
     public void deleteIncident(Incident incident) throws DeleteException;
 }

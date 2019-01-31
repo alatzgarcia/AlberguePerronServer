@@ -48,19 +48,31 @@ public class Incident implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date date;
 
+    /**
+     * Method to set the id to null when receiving an incident from the client
+     */
     public void setIdNull(){
         this.id = null;
     }
     
+    /**
+     * Getter for the id attribute
+     * @return 
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Setter for the id attribute
+     * @param id 
+     */
     public void setId(Integer id) {
         this.id = id;
     }
     
     /**
+     * Getter for the incidentType attribute
      * @return the incidentType
      */
     public String getIncidentType() {
@@ -68,6 +80,7 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Setter for the incidentType attribute
      * @param incidentType the incidentType to set
      */
     public void setIncidentType(String incidentType) {
@@ -75,6 +88,7 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Getter for the implicateds attribute
      * @return the implicateds
      */
     //@XmlTransient
@@ -83,6 +97,7 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Setter for the implicateds attribute
      * @param implicateds the implicateds to set
      */
     public void setImplicateds(List<User> implicateds) {
@@ -90,6 +105,7 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Getter for the description attribute
      * @return the description
      */
     public String getDescription() {
@@ -97,6 +113,7 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Setter for the description attribute
      * @param description the description to set
      */
     public void setDescription(String description) {
@@ -104,6 +121,7 @@ public class Incident implements Serializable {
     }
     
     /**
+     * Getter for the room attribute
      * @return the room
      */
     public Room getRoom() {
@@ -111,6 +129,7 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Setter for the room attribute
      * @param room the room to set
      */
     public void setRoom(Room room) {
@@ -118,6 +137,7 @@ public class Incident implements Serializable {
     }
     
     /**
+     * Getter for the date attribute
      * @return the date
      */
     public Date getDate() {
@@ -125,12 +145,17 @@ public class Incident implements Serializable {
     }
 
     /**
+     * Setter for the date attribute
      * @param date the date to set
      */
     public void setDate(Date date) {
         this.date = date;
     }
     
+    /**
+     * Hash code method
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -138,6 +163,12 @@ public class Incident implements Serializable {
         return hash;
     }
 
+    /**
+     * Compares two objects to check if they are of type Incident and if they
+     * are the same object
+     * @param object
+     * @return 
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -151,6 +182,10 @@ public class Incident implements Serializable {
         return true;
     }
 
+    /**
+     * Returns a string representing an incident object
+     * @return the incident as a string
+     */
     @Override
     public String toString() {
         return ("Incident id: " + this.getId().toString());
