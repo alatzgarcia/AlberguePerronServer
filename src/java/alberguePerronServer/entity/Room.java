@@ -7,14 +7,14 @@ package alberguePerronServer.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -36,13 +36,14 @@ public class Room implements Serializable {
 
     private static long serialVersionUID = 1L;
     @Id
+    //@XmlElement(name="stayRoom")
     private Integer roomNum;
     private Integer totalSpace;
     private Integer availableSpace;
     private Status status;
-    @OneToMany(mappedBy="room")
+    @OneToMany(cascade=CascadeType.ALL,mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(mappedBy="stayRoom")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="stayRoom")
     private List<Stay> stays;
     /**
      * 

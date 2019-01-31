@@ -81,6 +81,7 @@ public class RoomREST {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public List<Room> findAll() {
+        LOGGER.info("Server: Find all");
         List<Room> rooms = null;
         try {
             rooms = ejb.findAllRooms();

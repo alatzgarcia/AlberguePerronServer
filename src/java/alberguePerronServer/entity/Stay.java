@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="stay",schema="albergueperrondb")
 @NamedQuery(name="findAllStays", query="SELECT s FROM Stay s ORDER BY s.id ASC")
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)//preguntar
 public class Stay implements Serializable {
 
     private static long serialVersionUID = 1L;

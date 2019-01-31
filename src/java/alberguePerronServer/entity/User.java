@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -38,6 +39,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    //@XmlElement(name="guest")
     private String id;
     private String name;
     private String surname1;
