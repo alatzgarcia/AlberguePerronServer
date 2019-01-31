@@ -41,9 +41,9 @@ public class Room implements Serializable {
     private Integer totalSpace;
     private Integer availableSpace;
     private Status status;
-    @OneToMany(cascade=CascadeType.ALL,mappedBy="room")
+    @OneToMany(mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy="stayRoom")
+    @OneToMany(mappedBy="stayRoom",cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<Stay> stays;
     /**
      * 

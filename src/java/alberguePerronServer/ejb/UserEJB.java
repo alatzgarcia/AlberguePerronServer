@@ -66,8 +66,9 @@ public class UserEJB implements UserManagerEJBLocal{
     public void createUser(User user) throws CreateException {
         LOGGER.info("UserEJB: Creating user.");
         try{
-            user.setPassword(DatatypeConverter.printHexBinary(decrypt(DatatypeConverter.parseHexBinary(user.getPassword()))));
-            user.setPassword(DatatypeConverter.printHexBinary(getDigest(user.getPassword())));
+            //user.setPassword(DatatypeConverter.printHexBinary(decrypt(DatatypeConverter.parseHexBinary(user.getPassword()))));
+            //user.setPassword(DatatypeConverter.printHexBinary(getDigest(user.getPassword())));
+            
             em.persist(user);
             LOGGER.info("UserEJB: User created.");
         }catch(Exception e){
@@ -128,7 +129,7 @@ public class UserEJB implements UserManagerEJBLocal{
     public void deleteUser(User user) throws DeleteException {
         LOGGER.info("UserEJB: Deleting user.");
         try{
-            user=em.merge(user);
+            if(!em.contains(user))user=em.merge(user);
             em.remove(user);
             LOGGER.info("UserEJB: User deleted.");
         }catch(Exception e){

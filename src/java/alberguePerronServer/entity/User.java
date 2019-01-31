@@ -8,6 +8,7 @@ package alberguePerronServer.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -55,7 +56,7 @@ public class User implements Serializable {
     private List<Incident> incidents;
     @OneToMany(mappedBy="owner")
     private List<Pet> pets;
-    @OneToMany(mappedBy="guest")
+    @OneToMany(mappedBy="guest",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Stay> stays;
     
     /**
