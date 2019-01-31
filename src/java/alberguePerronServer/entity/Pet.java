@@ -15,120 +15,28 @@ import javax.persistence.Table;
 
 /**
  * 
- * @author Alatz
+ * @author 2dam
  */
 @Entity
 @Table(name="pet",schema="albergueperrondb")
 public class Pet implements Serializable {
 
-    private static long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    @ManyToOne
-    private User owner;
-    private String specie;
-    private String race;
-    private String name;
-    private String colour;
-    private String description;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the owner
-     */
-    public User getOwner() {
-        return owner;
-    }
-
-    /**
-     * @param owner the owner to set
-     */
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    /**
-     * @return the specie
-     */
-    public String getSpecie() {
-        return specie;
-    }
-
-    /**
-     * @param specie the specie to set
-     */
-    public void setSpecie(String specie) {
-        this.specie = specie;
-    }
-
-    /**
-     * @return the race
-     */
-    public String getRace() {
-        return race;
-    }
-
-    /**
-     * @param race the race to set
-     */
-    public void setRace(String race) {
-        this.race = race;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return the colour
-     */
-    public String getColour() {
-        return colour;
-    }
-
-    /**
-     * @param colour the colour to set
-     */
-    public void setColour(String colour) {
-        this.colour = colour;
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
+    private static final long serialVersionUID = 1L;
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   private Integer id;
+   @ManyToOne
+   private User owner;
+   private String specie;
+   private String race;
+   private String name;
+   private String colour;
+   private String description;
+   
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -139,7 +47,7 @@ public class Pet implements Serializable {
             return false;
         }
         Pet other = (Pet) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -147,6 +55,67 @@ public class Pet implements Serializable {
 
     @Override
     public String toString() {
-        return "alberguePerronServer.entity.Pet[ id=" + getId() + " ]";
+        return "entity.Pet[ id=" + id + " ]";
     }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getSpecie() {
+        return specie;
+    }
+
+    public String getRace() {
+        return race;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setSpecie(String specie) {
+        this.specie = specie;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    } 
+    
 }
