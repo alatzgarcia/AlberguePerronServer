@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Incident class for the AlberguePerronServer application
  * @author Alatz
  */
 @Entity
@@ -153,6 +153,6 @@ public class Incident implements Serializable {
 
     @Override
     public String toString() {
-        return "alberguePerronServer.entity.Incident[ id=" + getId() + " ]";
+        return ("Incident id: " + this.getId().toString());
     }
 }

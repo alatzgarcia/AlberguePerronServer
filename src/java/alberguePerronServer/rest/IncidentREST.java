@@ -26,8 +26,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- *
- * @author 2dam
+ * IncidentREST class for the AlberguePerronServer application
+ * @author Alatz
  */
 @Path("incident")
 public class IncidentREST {

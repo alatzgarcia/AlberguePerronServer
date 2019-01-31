@@ -6,7 +6,7 @@
 package alberguePerronServer.entity;
 
 /**
- *
+ * Privilege enumeration for the AlberguePerronServer application
  * @author Alatz
  */
 public enum Privilege {

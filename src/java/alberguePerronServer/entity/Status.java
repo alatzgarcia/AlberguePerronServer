@@ -6,8 +6,8 @@
 package alberguePerronServer.entity;
 
 /**
- *
- * @author 2dam
+ * Status enumeration for the AlberguePerronServer application
+ * @author Alatz
  */
 public enum Status {
     /*

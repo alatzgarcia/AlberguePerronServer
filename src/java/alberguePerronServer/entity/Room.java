@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Room class for the AlberguePerronServer application
  * @author Alatz
  */
 @Entity
