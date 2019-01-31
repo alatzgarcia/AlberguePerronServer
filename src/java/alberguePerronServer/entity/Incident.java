@@ -6,6 +6,7 @@
 package alberguePerronServer.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -43,6 +45,8 @@ public class Incident implements Serializable {
     private String description;
     @ManyToOne
     private Room room;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date date;
 
     public void setIdNull(){
         this.id = null;
@@ -112,7 +116,21 @@ public class Incident implements Serializable {
     public void setRoom(Room room) {
         this.room = room;
     }
+    
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
 
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
