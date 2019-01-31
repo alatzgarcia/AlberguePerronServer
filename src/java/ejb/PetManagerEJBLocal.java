@@ -23,7 +23,6 @@ public interface PetManagerEJBLocal {
   
     /**
      * Finds a {@link User} by its login. 
-     * @param login The login for the user to be found.
      * @return The {@link User} object containing user data. 
      * @throws ReadException If there is any Exception during processing.
      */
@@ -31,22 +30,22 @@ public interface PetManagerEJBLocal {
     public List<Pet> findAllPets() throws ReadException;
     /**
      * Finds a List of {@link User} objects containing data for all users with certain
-     * @return A List of {@link User} objects.
+     * @param pet
      * @throws ReadException If there is any Exception during processing.
      */
    
    
     public void updatePet(Pet pet) throws UpdateException, ReadException;
     /**
-     * Deletes a user's data in the underlying application storage. 
-     * @param user The {@link User} object containing the user data. 
+     * Deletes a user's data in the underlying application storage.
+     * @param pet 
      * @throws DeleteException If there is any Exception during processing.
      */
     public void deletePet(Pet pet) throws DeleteException, ReadException;
     
     /**
      * Creates a User and stores it in the underlying application storage. 
-     * @param user The {@link User} object containing the user data. 
+     * @param pet 
      * @throws CreateException If there is any Exception during processing.
      */
     public void createPet(Pet pet) throws CreateException, ReadException;

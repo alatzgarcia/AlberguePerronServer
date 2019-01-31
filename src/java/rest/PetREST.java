@@ -86,13 +86,14 @@ public class PetREST {
     public void delete(@PathParam("id") Integer id) {
         try {
             LOGGER.log(Level.INFO,"PetRESTful service: delete Pet by id={0}.",id);
-            Pet pet = null;
+            Pet pet = find(id) ;
             ejb.deletePet(pet);
         } catch (ReadException | DeleteException ex) {
             LOGGER.log(Level.SEVERE,
                     "PetRESTful service: Exception deleting pet by id, {0}",
                     ex.getMessage());
             throw new InternalServerErrorException(ex);
+           
         } 
     }
     /**
@@ -126,8 +127,7 @@ public class PetREST {
         List<Pet> pets=null;
         try {
             LOGGER.log(Level.INFO,"PetRESTful service: find all pets.");
-            pets=ejb.findAllPets(); 
-            
+            pets=ejb.findAllPets();        
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE,
                     "PetRESTful service: Exception reading all pets, {0}",

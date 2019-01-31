@@ -70,10 +70,6 @@ public class Pet implements Serializable {
         return id;
     }
 
-    public User getOwnerId() {
-        return owner;
-    }
-
     public String getSpecie() {
         return specie;
     }
@@ -96,10 +92,6 @@ public class Pet implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setOwnerId(User owner) {
-        this.owner = owner;
     }
 
     public void setSpecie(String specie) {

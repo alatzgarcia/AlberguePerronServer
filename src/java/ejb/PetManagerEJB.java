@@ -58,8 +58,6 @@ public class PetManagerEJB implements PetManagerEJBLocal {
         return pets;
     }
 
-   
-
     @Override
     public void updatePet(Pet pet) throws UpdateException {
        LOGGER.info("PetManager: Updating pet.");
@@ -93,6 +91,7 @@ public class PetManagerEJB implements PetManagerEJBLocal {
     public void createPet(Pet pet) throws CreateException {
         LOGGER.info("PetManager: Creating Pet.");
         try{
+            pet.setId(null);
             em.persist(pet);
             LOGGER.info("PetManager: Pet created.");
         }catch(Exception e){
@@ -115,8 +114,5 @@ public class PetManagerEJB implements PetManagerEJBLocal {
             throw new ReadException(e.getMessage());
         }
         return pet;
-    }
-
-  
-    
+    }    
 }

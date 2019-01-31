@@ -43,7 +43,7 @@ public class User implements Serializable {
     private String surname1;
     private String surname2;
     @Enumerated(EnumType.ORDINAL)
-   private Enumeration userPrivilege;
+    private Privilege privilege;
     private String login;
     private String email;
     private String password;
@@ -120,16 +120,16 @@ public class User implements Serializable {
         this.surname2 = surname2;
     }
     
-    public Enumeration getUserPrivilege() {
-        return userPrivilege;
+    public Privilege getPrivilege() {
+        return privilege;
     }
 
     /**
      * Gets privilege value for user.
      * @return The privilege value.
      */
-    public void setUserPrivilege(Enumeration userPrivilege) {
-        this.userPrivilege = userPrivilege;
+    public void setPrivilege(Privilege privilege) {
+        this.privilege = privilege;
     }
 
     /**

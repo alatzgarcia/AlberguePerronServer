@@ -7,10 +7,19 @@ package entity;
 
 /**
  *
- * @author 2dam
+ * @author ikerm
  */
-public enum Enumeration {
-    GUEST,
+public enum Privilege {
+    /**
+     * The user is a regular user.
+     */
+    USER,
+    /**
+     * The user is a regular employee
+     */
     EMPLOYEE,
+    /**
+     * The user is a privileged employee.
+     */
     ADMIN;
 }
