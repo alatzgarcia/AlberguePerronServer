@@ -54,6 +54,7 @@ public class StayREST {
     public void create(Stay stay) {
         try {
             LOGGER.log(Level.INFO,"StayREST: create stay, ",stay);
+            stay.setIdNull();
             ejb.createStay(stay);
         } catch (CreateException ex) {
             LOGGER.log(Level.SEVERE, 

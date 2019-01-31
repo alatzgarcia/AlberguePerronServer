@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -43,7 +44,7 @@ public class Room implements Serializable {
     private Status status;
     @OneToMany(mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(mappedBy="stayRoom",cascade = CascadeType.REMOVE,orphanRemoval = true)
+    @OneToMany(mappedBy="stayRoom",cascade = CascadeType.REMOVE,orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Stay> stays;
     /**
      * 

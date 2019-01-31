@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="stay",schema="albergueperrondb")
 @NamedQuery(name="findAllStays", query="SELECT s FROM Stay s ORDER BY s.id ASC")
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)//preguntar
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Stay implements Serializable {
 
     private static long serialVersionUID = 1L;
@@ -49,6 +49,10 @@ public class Stay implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    
+    public void setIdNull() {
+        this.id = null;
     }
 
     /**

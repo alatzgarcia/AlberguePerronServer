@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,7 +57,7 @@ public class User implements Serializable {
     private List<Incident> incidents;
     @OneToMany(mappedBy="owner")
     private List<Pet> pets;
-    @OneToMany(mappedBy="guest",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy="guest",cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Stay> stays;
     
     /**

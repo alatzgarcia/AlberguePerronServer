@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 /**
  *
@@ -44,12 +45,14 @@ public class StayEJB implements StayManagerEJBLocal{
      */
     @Override
     public void createStay(Stay stay) throws CreateException {
-        LOGGER.info("UserEJB: Creating user.");
+        LOGGER.info("StayEJB: Creating stay.");
         try{
             em.persist(stay);
-            LOGGER.info("UserEJB: User created.");
+            LOGGER.info("StayEJB: Stay created.");
+        }catch(PersistenceException pe){
+            LOGGER.severe(pe.getMessage());
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserEJB: Exception creating user.",
+            LOGGER.log(Level.SEVERE, "StayEJB: Exception creating stay.",
                     e.getMessage());
             throw new CreateException(e.getMessage());
         }
@@ -64,12 +67,12 @@ public class StayEJB implements StayManagerEJBLocal{
     public void updateStay(Stay stay) throws UpdateException {
         LOGGER.info("UserEJB: Updating user.");
         try{
-            //if(!em.contains(user))em.merge(user);
+            if(!em.contains(stay))em.merge(stay);
             em.merge(stay);
             em.flush();
-            LOGGER.info("UserEJB: User updated.");
+            LOGGER.info("StayEJB: stay updated.");
         }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserEJB: Exception updating user.",
+            LOGGER.log(Level.SEVERE, "StayEJB: Exception updating stay.",
                     e.getMessage());
             throw new UpdateException(e.getMessage());
         }
