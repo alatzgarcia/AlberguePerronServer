@@ -32,7 +32,13 @@ import javax.xml.bind.annotation.XmlTransient;
             query="SELECT u FROM User u ORDER BY u.name DESC"
     ),
     @NamedQuery(name="findUserByPrivilege", query="SELECT u FROM User u "
-            + "WHERE u.privilege = :privilege")
+            + "WHERE u.privilege = :privilege"),
+    @NamedQuery(name="findUserByLogin",
+            query="SELECT u FROM User u WHERE u.login = :login"
+    ),
+    @NamedQuery(name="findUserByEmail",
+            query="SELECT u FROM User u WHERE u.email = :email"
+    ),
 })
 @XmlRootElement
 public class User implements Serializable {

@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -109,6 +110,134 @@ public class UserEJB implements UserEJBLocal{
         } 
     }
 
+    /**
+     * Method to find an user by its email
+     *
+     * @param email The email of the user
+     * @return the user
+     * @throws ReadException
+     */
+    @Override
+    public User findUserByEmail(String email) throws ReadException {
+        User user = null;
+        try {
+            user = (User) em.createNamedQuery("findUserByEmail")
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        return user;
+    }
+    
+    /**
+     * Method for the login of the user
+     *
+     * @param user The user
+     * @return The user
+     * @throws ReadException
+     */
+    @Override
+    public User login(User user) throws ReadException {
+        User userDB = null;
+
+        //desencrypt the password tha has been encrypted in the client
+        byte[] pass = Crypthography.desencrypt(user.getPassword());
+
+        //get the digest
+        byte[] digestCliente = Crypthography.getDigest(pass);
+
+        try {
+            //find the user by the login
+
+            userDB = (User) em.createNamedQuery("findUserByLogin")
+                    .setParameter("login", user.getLogin())
+                    .getSingleResult();
+
+            //get the password that is kept in the DB
+            byte[] digestDB = DatatypeConverter.parseHexBinary(userDB.getPassword());
+
+            //Compare the two hashes
+            if (userDB != null) {
+                if (MessageDigest.isEqual(digestDB, digestCliente)) {
+                    LOGGER.info("Correct login");
+                } else {
+                    userDB = null;
+                    LOGGER.info("Incorect login");
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+
+        return userDB;
+    }
+
+    /**
+     * Method for the recovery of the password
+     *
+     * @param user The user
+     * @return
+     * @throws ReadException
+     */
+    @Override
+    public User recoverPassword(User user) throws ReadException {
+
+        try {
+            
+            //New random password
+            String[] symbols = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+            int length = 10;
+            Random random = SecureRandom.getInstance("SHA1PRNG");
+            StringBuilder stringBuilder = new StringBuilder(length);
+            for (int i = 0; i < length; i++) {
+                int indexRandom = random.nextInt(symbols.length);
+                stringBuilder.append(symbols[indexRandom]);
+            }
+            String pass = stringBuilder.toString();
+
+            user.setPassword(DatatypeConverter.printHexBinary(
+                    Crypthography.getDigest(pass.getBytes())));
+
+            updateUser(user);
+            Email.sendEmailRecovery(user, pass);
+
+        } catch (UpdateException | NoSuchAlgorithmException e) {
+            LOGGER.severe(e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+
+        return user;
+    }
+    
+    /**
+     * Method for the change of the password
+     *
+     * @param user the user
+     * @return
+     * @throws alberguePerronServer.exception.UpdateException
+     */
+    @Override
+    public User changePassword(User user) throws UpdateException {
+        
+        //desencrypt the password tha has been encrypted in the client
+        byte[] pass = Crypthography.desencrypt(user.getPassword());
+
+        user.setPassword(DatatypeConverter.printHexBinary(Crypthography.getDigest(pass)));
+
+        try {
+            updateUser(user);
+            Email.sendEmailChange(user);
+        } catch (UpdateException e) {
+            LOGGER.severe(e.getMessage());
+            throw new UpdateException(e.getMessage());
+        }
+
+        return user;
+    }
+    
     @Override
     public List<User> findAllByPrivilege(Privilege privilege) throws ReadException {
         List<User> users=null;
