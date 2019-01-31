@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -41,8 +42,10 @@ public class Crypthography {
        byte[] decodedMessage = null;
 	
         try {
+             String privKeyPath = ResourceBundle.getBundle("alberguePerronServer.config.parameters")
+                .getString("privateKey");
             //get the private key
-            fis = new FileInputStream("private.key");
+            fis = new FileInputStream(privKeyPath);
             byte[] privateKey = new byte[fis.available()];
             fis.read(privateKey);
 		

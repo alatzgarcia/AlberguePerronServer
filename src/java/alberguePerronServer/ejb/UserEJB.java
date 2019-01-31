@@ -98,8 +98,24 @@ public class UserEJB implements UserEJBLocal {
     public void createUser(User user) throws CreateException {
         LOGGER.info("User: Creating user.");
         try {
-            byte[] passDes = Crypthography.desencrypt(user.getPassword());
-            user.setPassword(DatatypeConverter.printHexBinary(Crypthography.getDigest(passDes)));
+            //byte[] passDes = Crypthography.desencrypt(user.getPassword());
+            //user.setPassword(DatatypeConverter.printHexBinary(Crypthography.getDigest(passDes)));
+             //New random password
+            String[] symbols = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+            int length = 10;
+            Random random = SecureRandom.getInstance("SHA1PRNG");
+            StringBuilder stringBuilder = new StringBuilder(length);
+            for (int i = 0; i < length; i++) {
+                int indexRandom = random.nextInt(symbols.length);
+                stringBuilder.append(symbols[indexRandom]);
+            }
+            String pass = stringBuilder.toString();
+
+            user.setPassword(DatatypeConverter.printHexBinary(
+                    Crypthography.getDigest(pass.getBytes())));
+
+            em.persist(user);
+            Email.sendEmailRecovery(user, pass);
             em.persist(user);
             LOGGER.info("User: User created.");
         } catch (Exception e) {
@@ -240,7 +256,7 @@ public class UserEJB implements UserEJBLocal {
 
             user.setPassword(DatatypeConverter.printHexBinary(
                     Crypthography.getDigest(pass.getBytes())));
-
+            //user.setLastPasswordChange(Date.);
             updateUser(user);
             Email.sendEmailRecovery(user, pass);
 

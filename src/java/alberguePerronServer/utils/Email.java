@@ -15,6 +15,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -128,13 +129,19 @@ public class Email{
      */
     public static ArrayList<String> getEmailCredentials(){
 	ArrayList<String> creedentials = new ArrayList<>();
+         String privKeyPath = ResourceBundle.getBundle("alberguePerronServer.config.parameters")
+                .getString("privateKeyEmail");
+         String emailPath = ResourceBundle.getBundle("alberguePerronServer.config.parameters")
+                .getString("emailEncrip");
+         String passPath = ResourceBundle.getBundle("alberguePerronServer.config.parameters")
+                .getString("passEncrip");
 	ObjectInputStream ois = null;
 	try {
-            ois = new ObjectInputStream(new FileInputStream("privKey"));
+            ois = new ObjectInputStream(new FileInputStream(privKeyPath));
             SecretKey privateKey =(SecretKey) ois.readObject();
 	   
 	    //email									
-            ois = new ObjectInputStream(new FileInputStream("email"));
+            ois = new ObjectInputStream(new FileInputStream(emailPath));
             byte[] iv1 =(byte[]) ois.readObject();
             byte[] encodedEmail =(byte[]) ois.readObject();
 					
@@ -145,7 +152,7 @@ public class Email{
             String email = new String(decodedEmail);
             
             //password
-            ois = new ObjectInputStream(new FileInputStream("pass"));
+            ois = new ObjectInputStream(new FileInputStream(passPath));
             byte[] iv2 =(byte[]) ois.readObject();
             byte[] encodedPass =(byte[]) ois.readObject();
 	
