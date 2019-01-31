@@ -7,6 +7,7 @@ package alberguePerronServer.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,7 +43,7 @@ public class Room implements Serializable {
     private Status status;
     @OneToMany(mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(mappedBy="stayRoom")
+    @OneToMany(mappedBy="stayRoom", cascade=CascadeType.REMOVE, orphanRemoval = true)
     private List<Stay> stays;
     /**
      * 

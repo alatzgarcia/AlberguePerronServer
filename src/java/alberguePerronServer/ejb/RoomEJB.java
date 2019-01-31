@@ -110,7 +110,9 @@ public class RoomEJB implements RoomEJBLocal{
     public void deleteRoom(Room room) throws DeleteException {
         LOGGER.info("RoomManager: Deleting room.");
         try{
-            room=em.merge(room);
+            if(!em.contains(room)){
+                room=em.merge(room);
+            }
             em.remove(room);
             LOGGER.info("RoomManager: Room deleted.");
         }catch(Exception e){
