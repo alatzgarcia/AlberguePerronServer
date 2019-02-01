@@ -43,7 +43,7 @@ public class Room implements Serializable {
     private Status status;
     @OneToMany(mappedBy="room")
     private List<Incident> incidents;
-    @OneToMany(mappedBy="stayRoom", cascade=CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy="stayRoom")
     private List<Stay> stays;
     /**
      * 
