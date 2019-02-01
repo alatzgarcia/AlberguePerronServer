@@ -69,9 +69,8 @@ public class StayREST {
      * @param stay Stay: The data of the stay to update
      */
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, Stay stay) {
+    public void edit(Stay stay) {
         try {
             LOGGER.log(Level.INFO,"StayREST: update stay, ",stay);
             ejb.updateStay(stay);

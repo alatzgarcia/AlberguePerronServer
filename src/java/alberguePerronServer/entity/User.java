@@ -64,7 +64,7 @@ public class User implements Serializable {
     private List<Incident> incidents;
     @OneToMany(mappedBy="owner")
     private List<Pet> pets;
-    @OneToMany(mappedBy="guest",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy="guest")
     private List<Stay> stays;
     
     /**
