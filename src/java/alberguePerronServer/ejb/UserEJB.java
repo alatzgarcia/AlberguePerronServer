@@ -83,18 +83,19 @@ public class UserEJB implements UserManagerEJBLocal{
      * @throws UpdateException throws when the update fails
      */
     @Override
-    public void updateUser(User user, String id) throws UpdateException {
+    public void updateUser(User user) throws UpdateException {
         LOGGER.info("UserEJB: Updating user.");
         try{
-            User oldUser=findUserById(id);
-            //if(!em.contains(user))em.merge(user);
-            deleteUser(oldUser);
-            em.merge(user);
+            //User oldUser=findUserById(user.getId());
+            if(!em.contains(user))em.merge(user);
+            //deleteUser(oldUser);
+            //em.merge(user);
             em.flush();
             LOGGER.info("UserEJB: User updated.");
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "UserEJB: Exception updating user: ",
                     e.getMessage());
+            e.printStackTrace();
             throw new UpdateException(e.getMessage());
         }    }
 

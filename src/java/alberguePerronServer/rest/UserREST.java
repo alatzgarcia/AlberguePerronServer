@@ -69,12 +69,11 @@ public class UserREST{
      * @param user User: The data of the update of the user.
      */
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") String id, User user) {
+    public void edit(User user) {
         try {
             LOGGER.log(Level.INFO,"UserREST: Updating user, ",user);
-            ejb.updateUser(user,id);
+            ejb.updateUser(user);
         } catch (UpdateException ex) {
             LOGGER.log(Level.SEVERE,
                     "UserREST: user updating exception",
